@@ -1,0 +1,1 @@
+D:\Sources\determinant-winphone\src\Determinant.Windows\Determinant.Windows.csproj;neutral
