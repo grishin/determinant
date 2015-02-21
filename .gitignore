@@ -1,0 +1,11 @@
+bin
+obj
+*.user
+*.suo
+*.v11.suo
+Thumbs.db
+*.mdf
+*.ldf
+packages
+Elmah.Errors
+/srcjs/dropapi/newrelic_agent.log
