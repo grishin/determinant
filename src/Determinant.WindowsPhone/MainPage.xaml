@@ -8,7 +8,45 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Grid Background="Black" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border BorderBrush="Yellow" BorderThickness="5" Grid.Row="0" Grid.Column="0">
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="1" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center"  />
+        </Border>
+        <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="0" Grid.Column="1">
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="2" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </Border>
+        <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="0" Grid.Column="2">
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="3" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </Border>
 
+        <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="1" Grid.Column="0">
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="4" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </Border>
+        <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="1" Grid.Column="1">
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="5" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </Border>
+        <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="1" Grid.Column="2">
+            <TextBlock Grid.Row="1" Grid.Column="2" Text="6" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </Border>
+
+        <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="2" Grid.Column="0">
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="7" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center"  />
+        </Border>
+        <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="2" Grid.Column="1">
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="8" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </Border>
+        <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="2" Grid.Column="2">
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="9" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </Border>
     </Grid>
 </Page>

@@ -1,1 +1,0 @@
-D:\Sources\determinant\src\Determinant.Windows\Determinant.Windows.csproj;neutral
