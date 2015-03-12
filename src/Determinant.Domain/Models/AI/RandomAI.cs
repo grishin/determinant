@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Determinant.Domain.Models.Player
+namespace Determinant.Domain.Models.AI
 {
-    public interface IPlayer
+    public class RandomAI : IAI
     {
-        string GetName();
     }
 }

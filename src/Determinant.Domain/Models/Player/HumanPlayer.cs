@@ -8,6 +8,9 @@ namespace Determinant.Domain.Models.Player
 {
     public class HumanPlayer : IPlayer
     {
-
+        public string GetName()
+        {
+            return "Human";
+        }
     }
 }

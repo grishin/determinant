@@ -35,19 +35,24 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\AI\IAI.cs" />
+    <Compile Include="Models\AI\KillerAI.cs" />
+    <Compile Include="Models\AI\RandomAI.cs" />
+    <Compile Include="Models\Game.cs" />
     <Compile Include="Models\Matrix\IMatrix.cs" />
     <Compile Include="Models\Matrix\Matrix3x3.cs" />
     <Compile Include="Models\Player\AiPlayer.cs" />
     <Compile Include="Models\Player\HumanPlayer.cs" />
     <Compile Include="Models\Player\IPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Game\IGameBuilder.cs" />
+    <Compile Include="Services\Game\SinglePlayerGameBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
