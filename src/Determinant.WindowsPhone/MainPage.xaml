@@ -95,7 +95,7 @@
             </Border>
         </Grid>
 
-        <TextBlock Name="Winner" Margin="0 10 0 0" TextAlignment="Center" FontSize="30" Text="" ></TextBlock>
-        
+        <TextBlock Name="Winner" Margin="0 10 0 0" TextAlignment="Center" FontSize="30" Text="" Visibility="Collapsed" ></TextBlock>
+        <Button Name="Restart" Content="Restart" HorizontalAlignment="Center" Tapped="Restart_Tapped"></Button>
     </StackPanel>
 </Page>

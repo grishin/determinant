@@ -27,8 +27,8 @@ namespace Determinant
     {
         private Border _selectedGameFieldGridCell;
         private TextBlock _selectedGameFieldGridText;
-        private int _selectedGameFieldGridPosX;
-        private int _selectedGameFieldGridPosY;
+        private int? _selectedGameFieldGridPosX;
+        private int? _selectedGameFieldGridPosY;
 
         private Game _game;
 
@@ -40,14 +40,12 @@ namespace Determinant
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
-        /// <summary>
-        /// Invoked when this page is about to be displayed in a Frame.
-        /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void Init()
         {
             _game = new SinglePlayerGameBuilder().CreateGame();
+
+            Winner.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            Restart.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
             foreach (var border in GameFieldGrid.Children.Cast<Border>())
             {
@@ -56,14 +54,20 @@ namespace Determinant
                 textBlock.Foreground = new SolidColorBrush(Colors.Black);
             }
 
+            foreach(var border in  AvailableNumbersGrid.Children.Cast<Border>())
+            {
+                border.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+        }
 
-            // TODO: Prepare page for display here.
-
-            // TODO: If your application contains multiple pages, ensure that you are
-            // handling the hardware Back button by registering for the
-            // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
-            // If you are using the NavigationHelper provided by some templates,
-            // this event is handled for you.
+        /// <summary>
+        /// Invoked when this page is about to be displayed in a Frame.
+        /// </summary>
+        /// <param name="e">Event data that describes how this page was reached.
+        /// This parameter is typically used to configure the page.</param>
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            Init();
         }
 
         private FrameworkElement GetGameFieldGridElement(int posx, int posy)
@@ -74,8 +78,13 @@ namespace Determinant
 
         private void GameFieldGridCell_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            _selectedGameFieldGridCell = (Border)sender;
-            _selectedGameFieldGridText = (TextBlock)_selectedGameFieldGridCell.Child;
+            var selectedGameFieldGridCell = (Border)sender;
+            var selectedGameFieldGridText = (TextBlock)selectedGameFieldGridCell.Child;
+
+            if (selectedGameFieldGridText.Text != "?")  return;
+
+            _selectedGameFieldGridCell = selectedGameFieldGridCell;
+            _selectedGameFieldGridText = selectedGameFieldGridText;
 
             _selectedGameFieldGridPosX = Grid.GetRow(_selectedGameFieldGridCell);
             _selectedGameFieldGridPosY = Grid.GetColumn(_selectedGameFieldGridCell);
@@ -91,9 +100,6 @@ namespace Determinant
             // setting selected style for tapped cell
 
             _selectedGameFieldGridCell.Background = new SolidColorBrush(Colors.PaleGoldenrod);
-
-
-            //tappedTextBlock.Text = posx + ":" + posy;
         }
 
 
@@ -102,12 +108,23 @@ namespace Determinant
             var selectedAvailableNumbersGridCell = (Border)sender;
             var selectedAvailableNumbersGridTextBlock = (TextBlock)selectedAvailableNumbersGridCell.Child;
 
+            if (_selectedGameFieldGridText == null || _selectedGameFieldGridCell == null
+                || _selectedGameFieldGridPosX == null || _selectedGameFieldGridPosY == null
+                ) return;
+
             _selectedGameFieldGridText.Text = selectedAvailableNumbersGridTextBlock.Text;
             _selectedGameFieldGridText.Foreground = new SolidColorBrush(Colors.White);
 
             selectedAvailableNumbersGridCell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            _selectedGameFieldGridCell.Background = new SolidColorBrush(Colors.Black);
 
-            _game.MakeTurn(_selectedGameFieldGridPosX, _selectedGameFieldGridPosY, Convert.ToInt32(selectedAvailableNumbersGridTextBlock.Text));
+            _game.MakeTurn(_selectedGameFieldGridPosX.Value, _selectedGameFieldGridPosY.Value, Convert.ToInt32(selectedAvailableNumbersGridTextBlock.Text));
+
+
+            _selectedGameFieldGridCell = null;
+            _selectedGameFieldGridText = null;
+            _selectedGameFieldGridPosX = null;
+            _selectedGameFieldGridPosY = null;
 
             if (_game.IsCompleted)
             {
@@ -122,9 +139,17 @@ namespace Determinant
                     case Domain.Models.Winner.Draw:
                          Winner.Text = "DRAW";
                         break;
-                }                
+                }
+
+                Winner.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                Restart.Visibility = Windows.UI.Xaml.Visibility.Visible;
             }
 
+        }
+
+        private void Restart_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Init();
         }
     }
 }
