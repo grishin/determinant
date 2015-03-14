@@ -80,7 +80,7 @@ namespace Determinant.Domain.Models.Matrix
             {
                 for (int y = 0; y < SizeY; y++)
                 {
-                    if (_matrix[x, y] == 0) { return false; };
+                    if (_matrix[x, y] == null) { return false; };
                 }
             }
 
