@@ -9,7 +9,6 @@ namespace Determinant.Domain.Models.Matrix
     public class Matrix3x3 : IMatrix
     {
         int?[,] _matrix = new int?[SizeX, SizeY];				
-        List<int> _deletedNumbers = new List<int>(9);
 
         public const int SizeX = 3;
         public const int SizeY = 3;
@@ -19,12 +18,6 @@ namespace Determinant.Domain.Models.Matrix
         public Matrix3x3()
         {
             InitMatrix(); 
-            InitDeletedNumbersList();
-        }
-
-        private void InitDeletedNumbersList()
-        {
-            _deletedNumbers.Clear();
         }
 
         private void InitMatrix()
@@ -61,7 +54,6 @@ namespace Determinant.Domain.Models.Matrix
            if (GetValue(x, y) == null && x < SizeX && y < SizeY && value <= MaxValue)
            {
                _matrix[x, y] = value;     
-               _deletedNumbers.Add(value);
            }            
         }
   
@@ -80,6 +72,19 @@ namespace Determinant.Domain.Models.Matrix
                 (_matrix[1, 2] ?? 0) * (_matrix[2, 1] ?? 0) * (_matrix[0, 0] ?? 0);
 
             return positive - negative;
+        }
+
+        public bool IsFull()
+        {
+            for (int x = 0; x < SizeX; x++)
+            {
+                for (int y = 0; y < SizeY; y++)
+                {
+                    if (_matrix[x, y] == 0) { return false; };
+                }
+            }
+
+            return true;
         }
     }
 }
