@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Determinant.Domain.Models.Player
 {
-    public interface IPlayer
+    public class TurnResult
     {
-        string Name { get; }
-
-        PlayerGoal Goal { get; }
+        public MatrixCell Cell { get; set; }
+        public int Value { get; set; }
     }
 }

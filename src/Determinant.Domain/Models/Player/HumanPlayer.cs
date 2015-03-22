@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Determinant.Domain.Models.Matrix;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,17 @@ namespace Determinant.Domain.Models.Player
 {
     public class HumanPlayer : IPlayer
     {
-        public string GetName()
+        public HumanPlayer(PlayerGoal goal)
         {
-            return "Human";
+            Goal = goal;
         }
+
+        public string Name
+        {
+            get { return "Human"; }
+        }
+
+        public PlayerGoal Goal { get; private set; }
+       
     }
 }

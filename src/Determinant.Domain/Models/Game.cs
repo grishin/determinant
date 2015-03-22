@@ -12,9 +12,12 @@ namespace Determinant.Domain.Models
     {
         public bool IsCompleted { get; private set; }
         public Winner Winner { get; private set; }
+        public IPlayer ActivePlayer { get; private set; }
 
         private Matrix3x3 _matrix;
         private IEnumerable<IPlayer> _players;
+
+        private const int MaxPlayers = 2;
 
         public Game(IEnumerable<IPlayer> players)
         {
@@ -25,29 +28,51 @@ namespace Determinant.Domain.Models
             Winner = Models.Winner.None;
         }
 
-        public void MakeTurn(int posx, int posy, int value)
+        public TurnResult MakeTurn(int posx, int posy, int value)
         {
-            _matrix.SetValue(posx, posy, value);
+            TurnResult computerPlayerTurnResult = null;
 
-            if (_matrix.IsFull())
+            foreach (var player in _players)
             {
-                int determinant = _matrix.GetDeterminant();
-
-                if (determinant > 0)
+                if (player is HumanPlayer)
                 {
-                    Winner = Models.Winner.Positive;
+                    _matrix.SetValue(posx, posy, value);
                 }
-                else if (determinant < 0)
+                else if (player is ComputerPlayer)
                 {
-                    Winner = Models.Winner.Negative;
-                }
-                else 
-                {
-                    Winner = Models.Winner.Draw;
+                    computerPlayerTurnResult = (player as ComputerPlayer).MakeTurn(_matrix);
+                    _matrix.SetValue(computerPlayerTurnResult.Cell.Column, computerPlayerTurnResult.Cell.Row, computerPlayerTurnResult.Value);
                 }
 
-                IsCompleted = true;
+                if (_matrix.IsFull())
+                {
+                    int determinant = _matrix.GetDeterminant();
+
+                    if (determinant > 0)
+                    {
+                        Winner = Models.Winner.Positive;
+                    }
+                    else if (determinant < 0)
+                    {
+                        Winner = Models.Winner.Negative;
+                    }
+                    else
+                    {
+                        Winner = Models.Winner.Draw;
+                    }
+
+                    IsCompleted = true;
+
+                    return null;
+                }
             }
+
+            return computerPlayerTurnResult;
+        }
+
+        private void CheckGameCompleted()
+        {
+            
         }
 
     }

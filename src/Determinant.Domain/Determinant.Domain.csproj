@@ -41,15 +41,18 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\AI\IAI.cs" />
-    <Compile Include="Models\AI\KillerAI.cs" />
-    <Compile Include="Models\AI\RandomAI.cs" />
+    <Compile Include="Models\AI\IComputerPlayerStrategy.cs" />
+    <Compile Include="Models\AI\ComputerPlayerStrategyKiller.cs" />
+    <Compile Include="Models\AI\ComputerPlayerStrategyRandom.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\Matrix\IMatrix.cs" />
-    <Compile Include="Models\Matrix\Matrix3x3.cs" />
-    <Compile Include="Models\Player\AiPlayer.cs" />
+    <Compile Include="Models\Matrix\Matrix.cs" />
+    <Compile Include="Models\Matrix\MatrixCell.cs" />
+    <Compile Include="Models\Player\ComputerPlayer.cs" />
     <Compile Include="Models\Player\HumanPlayer.cs" />
     <Compile Include="Models\Player\IPlayer.cs" />
+    <Compile Include="Models\Player\PlayerGoal.cs" />
+    <Compile Include="Models\TurnResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Game\IGameBuilder.cs" />
     <Compile Include="Services\Game\SinglePlayerGameBuilder.cs" />

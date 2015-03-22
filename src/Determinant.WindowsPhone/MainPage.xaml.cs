@@ -1,4 +1,5 @@
 ﻿using Determinant.Domain.Models;
+using Determinant.Domain.Models.Matrix;
 using Determinant.Domain.Services.Game;
 using System;
 using System.Collections.Generic;
@@ -27,11 +28,10 @@ namespace Determinant
     {
         private Border _selectedGameFieldGridCell;
         private TextBlock _selectedGameFieldGridText;
-        private int? _selectedGameFieldGridPosX;
-        private int? _selectedGameFieldGridPosY;
+        private int? _selectedGameFieldGridColumn;
+        private int? _selectedGameFieldGridRow;
 
         private Game _game;
-
 
         public MainPage()
         {
@@ -54,7 +54,7 @@ namespace Determinant
                 textBlock.Foreground = new SolidColorBrush(Colors.Black);
             }
 
-            foreach(var border in  AvailableNumbersGrid.Children.Cast<Border>())
+            foreach (var border in AvailableNumbersGrid.Children.Cast<Border>())
             {
                 border.Visibility = Windows.UI.Xaml.Visibility.Visible;
             }
@@ -68,12 +68,20 @@ namespace Determinant
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Init();
+
+            var el = GetAvailableNumbersGridElement(5);
         }
 
-        private FrameworkElement GetGameFieldGridElement(int posx, int posy)
+        private Border GetGameFieldGridElement(MatrixCell cell)
         {
-            return GameFieldGrid.Children.Cast<FrameworkElement>()
-                .First(x => Grid.GetRow(x) == posx && Grid.GetColumn(x) == posy);
+            return GameFieldGrid.Children.Cast<Border>()
+                .First(x => Grid.GetRow(x) == cell.Row && Grid.GetColumn(x) == cell.Column);
+        }
+
+        private Border GetAvailableNumbersGridElement(int value)
+        {
+            return AvailableNumbersGrid.Children.Cast<Border>()
+                .First(x => ((TextBlock)x.Child).Text == value.ToString());
         }
 
         private void GameFieldGridCell_Tapped(object sender, TappedRoutedEventArgs e)
@@ -81,18 +89,16 @@ namespace Determinant
             var selectedGameFieldGridCell = (Border)sender;
             var selectedGameFieldGridText = (TextBlock)selectedGameFieldGridCell.Child;
 
-            if (selectedGameFieldGridText.Text != "?")  return;
+            if (selectedGameFieldGridText.Text != "?") return;
 
             _selectedGameFieldGridCell = selectedGameFieldGridCell;
             _selectedGameFieldGridText = selectedGameFieldGridText;
 
-            _selectedGameFieldGridPosX = Grid.GetRow(_selectedGameFieldGridCell);
-            _selectedGameFieldGridPosY = Grid.GetColumn(_selectedGameFieldGridCell);
-
-           // if (_selectedGameFieldGridText.Text != "?") return;
+            _selectedGameFieldGridColumn = Grid.GetColumn(_selectedGameFieldGridCell);
+            _selectedGameFieldGridRow = Grid.GetRow(_selectedGameFieldGridCell);
 
             // resetting color and thickness for all cells
-            foreach(var border in GameFieldGrid.Children.Cast<Border>())
+            foreach (var border in GameFieldGrid.Children.Cast<Border>())
             {
                 border.Background = new SolidColorBrush(Colors.Black);
             }
@@ -108,8 +114,10 @@ namespace Determinant
             var selectedAvailableNumbersGridCell = (Border)sender;
             var selectedAvailableNumbersGridTextBlock = (TextBlock)selectedAvailableNumbersGridCell.Child;
 
-            if (_selectedGameFieldGridText == null || _selectedGameFieldGridCell == null
-                || _selectedGameFieldGridPosX == null || _selectedGameFieldGridPosY == null
+            if (_selectedGameFieldGridText == null
+                || _selectedGameFieldGridCell == null
+                || _selectedGameFieldGridColumn == null
+                || _selectedGameFieldGridRow == null
                 ) return;
 
             _selectedGameFieldGridText.Text = selectedAvailableNumbersGridTextBlock.Text;
@@ -118,33 +126,45 @@ namespace Determinant
             selectedAvailableNumbersGridCell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             _selectedGameFieldGridCell.Background = new SolidColorBrush(Colors.Black);
 
-            _game.MakeTurn(_selectedGameFieldGridPosX.Value, _selectedGameFieldGridPosY.Value, Convert.ToInt32(selectedAvailableNumbersGridTextBlock.Text));
-
+            var computerPlayerTurnResult = _game.MakeTurn(_selectedGameFieldGridColumn.Value, _selectedGameFieldGridRow.Value, Convert.ToInt32(selectedAvailableNumbersGridTextBlock.Text));
 
             _selectedGameFieldGridCell = null;
             _selectedGameFieldGridText = null;
-            _selectedGameFieldGridPosX = null;
-            _selectedGameFieldGridPosY = null;
+            _selectedGameFieldGridColumn = null;
+            _selectedGameFieldGridRow = null;
 
-            if (_game.IsCompleted)
+            if (computerPlayerTurnResult != null)
             {
-                switch(_game.Winner)
-                {
-                    case Domain.Models.Winner.Positive:
-                         Winner.Text = "Winner is POSITIVE";
-                        break;
-                    case Domain.Models.Winner.Negative:
-                         Winner.Text = "Winner is NEGATIVE";
-                        break;
-                    case Domain.Models.Winner.Draw:
-                         Winner.Text = "DRAW";
-                        break;
-                }
+                var availableNumbersGridCell = GetAvailableNumbersGridElement(computerPlayerTurnResult.Value);
+                availableNumbersGridCell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
-                Winner.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                Restart.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                var gameFieldGridCell = GetGameFieldGridElement(computerPlayerTurnResult.Cell);
+                var gameFieldGridText = (TextBlock)gameFieldGridCell.Child;
+                gameFieldGridText.Text = computerPlayerTurnResult.Value.ToString();
+                gameFieldGridText.Foreground = new SolidColorBrush(Colors.Purple);
+                gameFieldGridText.Visibility = Windows.UI.Xaml.Visibility.Visible;
             }
 
+            if (_game.IsCompleted) { OnGameCompleted(); }
+        }
+
+        private void OnGameCompleted()
+        {
+            switch (_game.Winner)
+            {
+                case Domain.Models.Winner.Positive:
+                    Winner.Text = "Winner is POSITIVE";
+                    break;
+                case Domain.Models.Winner.Negative:
+                    Winner.Text = "Winner is NEGATIVE";
+                    break;
+                case Domain.Models.Winner.Draw:
+                    Winner.Text = "DRAW";
+                    break;
+            }
+
+            Winner.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            Restart.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         private void Restart_Tapped(object sender, TappedRoutedEventArgs e)

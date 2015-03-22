@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Determinant.Domain.Models.AI
+namespace Determinant.Domain.Models.Player
 {
-    public class KillerAI : IAI
+    public enum PlayerGoal
     {
+        Positive = 1,
+        Negative = 2
     }
 }

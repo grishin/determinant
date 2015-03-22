@@ -8,16 +8,33 @@ namespace Determinant.Domain.Models.Matrix
 {
     public class Matrix3x3 : IMatrix
     {
-        int?[,] _matrix = new int?[SizeX, SizeY];				
+        private int?[,] _matrix = new int?[SizeX, SizeY];
+        private int[] _allValues = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         public const int SizeX = 3;
         public const int SizeY = 3;
 
+        public const int MinValue = 1;
         public const int MaxValue = 9;
 
         public Matrix3x3()
         {
             InitMatrix(); 
+        }
+
+        private bool ValidateCellPosition(int x, int y)
+        {
+            if (x > 0 && x < SizeX) return true;
+            if (y > 0 && y < SizeY) return true;
+
+            return false;
+        }
+
+        private bool ValidateCellValue(int value)
+        {
+            if (value >= MinValue && value <= MaxValue) return true;
+
+            return false;
         }
 
         private void InitMatrix()
@@ -29,6 +46,53 @@ namespace Determinant.Domain.Models.Matrix
                     _matrix[x, y] = null;
                 }
             }
+        }
+
+        public IEnumerable<int> GetUsedValues()
+        {
+            var usedValues = new List<int>();
+
+            for (int x = 0; x < SizeX; x++)
+            {
+                for (int y = 0; y < SizeY; y++)
+                {
+                    if (_matrix[x, y] != null)
+                    {
+                        usedValues.Add(_matrix[x, y].Value);
+                    };
+                }
+            }
+
+            return usedValues.ToArray();
+        }
+
+        public IEnumerable<int> GetAvailableValues()
+        {
+            int[] allValues = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            return allValues.Except(GetUsedValues());
+        }
+
+        public bool IsCellEmpty(int x, int y)
+        {
+            return GetValue(x, y) == null;
+        }
+
+        public IEnumerable<MatrixCell> GetAvailableCells()
+        {
+            var availableCells = new List<MatrixCell>();
+
+            for (int x = 0; x < SizeX; x++)
+            {
+                for (int y = 0; y < SizeY; y++)
+                {
+                    if (_matrix[x, y] == null)
+                    {
+                        availableCells.Add(new MatrixCell { Column = x, Row = y});
+                    };
+                }
+            }
+
+            return availableCells;
         }
 
         /// <summary>

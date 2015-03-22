@@ -23,33 +23,33 @@
             </Grid.RowDefinitions>
 
             <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="0" Grid.Column="0" Tapped="GameFieldGridCell_Tapped"  >
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="1" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center"  />
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="1" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X0Y0"  />
             </Border>
             <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="0" Grid.Column="1" Tapped="GameFieldGridCell_Tapped">
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="2" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="2" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X1Y0" />
             </Border>
             <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="0" Grid.Column="2" Tapped="GameFieldGridCell_Tapped">
-                <TextBlock Grid.Row="0" Grid.Column="2" Text="3" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="3" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X2Y0" />
             </Border>
 
             <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="1" Grid.Column="0" Tapped="GameFieldGridCell_Tapped">
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="4" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="4" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X0Y1" />
             </Border>
             <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="1" Grid.Column="1" Tapped="GameFieldGridCell_Tapped">
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="5" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="5" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X1Y1" />
             </Border>
             <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="1" Grid.Column="2" Tapped="GameFieldGridCell_Tapped">
-                <TextBlock Grid.Row="1" Grid.Column="2" Text="6" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="6" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X2Y1" />
             </Border>
 
             <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="2" Grid.Column="0" Tapped="GameFieldGridCell_Tapped">
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="7" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center"  />
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="7" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X0Y2" />
             </Border>
             <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="2" Grid.Column="1" Tapped="GameFieldGridCell_Tapped">
-                <TextBlock Grid.Row="2" Grid.Column="1" Text="8" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="8" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X1Y2" />
             </Border>
             <Border BorderBrush="GreenYellow" BorderThickness="2" Grid.Row="2" Grid.Column="2" Tapped="GameFieldGridCell_Tapped">
-                <TextBlock Grid.Row="2" Grid.Column="2" Text="9" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="9" Foreground="White" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X2Y2" />
             </Border>
         </Grid>
 

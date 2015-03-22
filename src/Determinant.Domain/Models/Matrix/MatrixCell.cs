@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Determinant.Domain.Models.Matrix
 {
-    public interface IMatrix
+    public class MatrixCell
     {
-        IEnumerable<int> GetAvailableValues();
-
-        IEnumerable<MatrixCell> GetAvailableCells();
+        public int Column { get; set; }
+        public int Row { get; set; }
     }
 }
