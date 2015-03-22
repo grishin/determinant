@@ -44,6 +44,9 @@ namespace Determinant
         {
             _game = new SinglePlayerGameBuilder().CreateGame();
 
+            PositivePlayerName.Text = _game.PositivePlayer.Name;
+            NegativePlayerName.Text = _game.NegativePlayer.Name;
+
             Winner.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             Restart.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
@@ -150,17 +153,13 @@ namespace Determinant
 
         private void OnGameCompleted()
         {
-            switch (_game.Winner)
+            if (_game.Winner !=null)
             {
-                case Domain.Models.Winner.Positive:
-                    Winner.Text = "Winner is POSITIVE";
-                    break;
-                case Domain.Models.Winner.Negative:
-                    Winner.Text = "Winner is NEGATIVE";
-                    break;
-                case Domain.Models.Winner.Draw:
-                    Winner.Text = "DRAW";
-                    break;
+                Winner.Text = "Winner is " + _game.Winner.Name;
+            }
+            else
+            {
+                Winner.Text = "DRAW";
             }
 
             Winner.Visibility = Windows.UI.Xaml.Visibility.Visible;

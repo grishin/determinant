@@ -11,21 +11,32 @@ namespace Determinant.Domain.Models
     public class Game
     {
         public bool IsCompleted { get; private set; }
-        public Winner Winner { get; private set; }
-        public IPlayer ActivePlayer { get; private set; }
+        public IPlayer Winner { get; private set; }
+        public IPlayer CurrentPlayer { get; private set; }
 
         private Matrix3x3 _matrix;
         private IEnumerable<IPlayer> _players;
 
         private const int MaxPlayers = 2;
 
-        public Game(IEnumerable<IPlayer> players)
+        public IPlayer PositivePlayer { get; private set;}
+        public IPlayer NegativePlayer { get; private set;}
+
+        public Game(IPlayer positivePlayer, IPlayer negativePlayer)
         {
+            PositivePlayer = positivePlayer;
+            NegativePlayer = negativePlayer;
+
             _matrix = new Matrix3x3();
-            _players = players;
+            _players = new [] {
+             PositivePlayer, NegativePlayer   
+            };
 
             IsCompleted = false;
-            Winner = Models.Winner.None;
+            Winner = null;
+
+
+
         }
 
         public TurnResult MakeTurn(int posx, int posy, int value)
@@ -50,15 +61,15 @@ namespace Determinant.Domain.Models
 
                     if (determinant > 0)
                     {
-                        Winner = Models.Winner.Positive;
+                        Winner = PositivePlayer;
                     }
                     else if (determinant < 0)
                     {
-                        Winner = Models.Winner.Negative;
+                        Winner = NegativePlayer;
                     }
                     else
                     {
-                        Winner = Models.Winner.Draw;
+                        Winner = null;
                     }
 
                     IsCompleted = true;

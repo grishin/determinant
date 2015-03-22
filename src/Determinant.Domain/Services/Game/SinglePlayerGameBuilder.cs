@@ -14,12 +14,10 @@ namespace Determinant.Domain.Services.Game
     {
         public Game CreateGame()
         {
-            var players = new IPlayer[] {
-                  new HumanPlayer(PlayerGoal.Positive),
-                    new ComputerPlayer(new ComputerPlayerStrategyRandom(), PlayerGoal.Negative)
-            };
-
-            return new Game(players);
+            return new Game(
+                new HumanPlayer(PlayerGoal.Positive), 
+                 new ComputerPlayer(new ComputerPlayerStrategyRandom(), PlayerGoal.Negative)
+                );
         }
  
     }
