@@ -26,12 +26,81 @@ namespace Determinant
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        class Theme
+        {
+            public Theme(Brush foregroundBrush, Brush backgroundBrush)
+            {
+                ForegroundBrush = foregroundBrush;
+                BackgroundBrush = backgroundBrush;
+            }
+
+            public Brush ForegroundBrush { get; private set; }
+            public Brush BackgroundBrush { get; private set; }
+        }
+
+
+        class MainPageGameField
+        {
+            private Grid _grid;
+            private Theme _theme;
+
+            const string EmptyCellText = "?";
+
+            public MainPageGameField(Grid grid, Theme theme)
+            {
+                _grid = grid;
+                _theme = theme;
+            }
+
+            public IEnumerable<MainPageGameFieldCell> GetAllCells()
+            {
+                return _grid.Children.Cast<Border>().Select(x => new MainPageGameFieldCell
+                {
+                    Border = x,
+                    TextBlock = (TextBlock)x.Child
+                });
+            }
+
+            public MainPageGameFieldCell ActiveCell { get; set; }
+
+            public void ResetAllCells()
+            {
+                foreach (var cell in this.GetAllCells())
+                {
+                    cell.Border.Background = _theme.BackgroundBrush;
+                    cell.TextBlock.Text = EmptyCellText;
+                    cell.TextBlock.Foreground = _theme.BackgroundBrush;
+                }
+            }
+        }
+
+        class MainPageGameFieldCell
+        {
+            public Border Border { get; set; }
+            public TextBlock TextBlock { get; set; }
+
+            public int? GetValue()
+            {
+                int value;
+                if (Int32.TryParse(TextBlock.Text, out value))
+                {
+                    return value;
+                };
+
+                return null;
+            }
+        }
+
+        private MainPageGameField GameField { get; set; }
+
+
         private Border _selectedGameFieldGridCell;
         private TextBlock _selectedGameFieldGridText;
         private int? _selectedGameFieldGridColumn;
         private int? _selectedGameFieldGridRow;
 
         private Game _game;
+        private Theme _theme;
 
         public MainPage()
         {
@@ -40,23 +109,29 @@ namespace Determinant
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
-        private void Init()
+        private void InitVisualControls()
         {
+            _theme = new Theme(this.Background, this.Foreground);
+
+            // create new game data model
             _game = new SinglePlayerGameBuilder().CreateGame();
 
+            //--
+            GameField = new MainPageGameField(GameFieldGrid, _theme);
+            GameField.ActiveCell = null;
+
+            // setting player names
             PositivePlayerName.Text = _game.PositivePlayer.Name;
             NegativePlayerName.Text = _game.NegativePlayer.Name;
 
+            // hiding game completed controls
             Winner.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             Restart.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
-            foreach (var border in GameFieldGrid.Children.Cast<Border>())
-            {
-                var textBlock = (TextBlock)border.Child;
-                textBlock.Text = "?";
-                textBlock.Foreground = new SolidColorBrush(Colors.Black);
-            }
+            // reset gamefield grid values
+            GameField.ResetAllCells();
 
+            // set visible to availablenumbers grid buttons 
             foreach (var border in AvailableNumbersGrid.Children.Cast<Border>())
             {
                 border.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -70,9 +145,7 @@ namespace Determinant
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Init();
-
-            var el = GetAvailableNumbersGridElement(5);
+            InitVisualControls();
         }
 
         private Border GetGameFieldGridElement(MatrixCell cell)
@@ -100,15 +173,20 @@ namespace Determinant
             _selectedGameFieldGridColumn = Grid.GetColumn(_selectedGameFieldGridCell);
             _selectedGameFieldGridRow = Grid.GetRow(_selectedGameFieldGridCell);
 
-            // resetting color and thickness for all cells
+            // resetting color for all free cells
             foreach (var border in GameFieldGrid.Children.Cast<Border>())
             {
-                border.Background = new SolidColorBrush(Colors.Black);
+                var textBlock = (TextBlock)border.Child;
+                if (textBlock.Text == "?")
+                {
+                    textBlock.Foreground = this.Background;
+                    border.Background = this.Background;
+                }
             }
 
             // setting selected style for tapped cell
-
             _selectedGameFieldGridCell.Background = new SolidColorBrush(Colors.PaleGoldenrod);
+            _selectedGameFieldGridText.Foreground = new SolidColorBrush(Colors.PaleGoldenrod);
         }
 
 
@@ -124,10 +202,10 @@ namespace Determinant
                 ) return;
 
             _selectedGameFieldGridText.Text = selectedAvailableNumbersGridTextBlock.Text;
-            _selectedGameFieldGridText.Foreground = new SolidColorBrush(Colors.White);
+            _selectedGameFieldGridText.Foreground = this.Foreground;
 
             selectedAvailableNumbersGridCell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            _selectedGameFieldGridCell.Background = new SolidColorBrush(Colors.Black);
+            _selectedGameFieldGridCell.Background = this.Background;
 
             var computerPlayerTurnResult = _game.MakeTurn(_selectedGameFieldGridColumn.Value, _selectedGameFieldGridRow.Value, Convert.ToInt32(selectedAvailableNumbersGridTextBlock.Text));
 
@@ -153,7 +231,7 @@ namespace Determinant
 
         private void OnGameCompleted()
         {
-            if (_game.Winner !=null)
+            if (_game.Winner != null)
             {
                 Winner.Text = "Winner is " + _game.Winner.Name;
             }
@@ -168,7 +246,7 @@ namespace Determinant
 
         private void Restart_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Init();
+            InitVisualControls();
         }
     }
 }
