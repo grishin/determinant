@@ -40,7 +40,7 @@ namespace Determinant.Controls
         {
             var selectedAvailableNumbersGridCell = (Border)sender;
             var selectedAvailableNumbersGridTextBlock = (TextBlock)selectedAvailableNumbersGridCell.Child;
-
+         /*
             if (_selectedGameFieldGridText == null
                 || _selectedGameFieldGridCell == null
                 || _selectedGameFieldGridColumn == null
@@ -59,7 +59,7 @@ namespace Determinant.Controls
             _selectedGameFieldGridText = null;
             _selectedGameFieldGridColumn = null;
             _selectedGameFieldGridRow = null;
-
+           
             if (computerPlayerTurnResult != null)
             {
                 var availableNumbersGridCell = GetAvailableNumbersGridElement(computerPlayerTurnResult.Value);
@@ -69,10 +69,10 @@ namespace Determinant.Controls
                     var gameFieldGridText = (TextBlock)gameFieldGridCell.Child;
                     gameFieldGridText.Text = computerPlayerTurnResult.Value.ToString();
                     gameFieldGridText.Foreground = new SolidColorBrush(Colors.Purple);
-                    gameFieldGridText.Visibility = Windows.UI.Xaml.Visibility.Visible;  */
+                    gameFieldGridText.Visibility = Windows.UI.Xaml.Visibility.Visible;  
             }
 
-            if (_game.IsCompleted) { OnGameCompleted(); }
+            if (_game.IsCompleted) { OnGameCompleted(); }    */
         }
     }
 }

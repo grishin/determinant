@@ -1,5 +1,6 @@
 ﻿using Determinant.Domain.Models.Matrix;
 using Determinant.Helpers;
+using Determinant.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,6 +24,11 @@ namespace Determinant.Controls
         private Theme _theme;
         private const string EmptyCellText = "?";
 
+        private Border _selectedBorder;
+        private TextBlock _selectedTextBlock;
+        private int? _selectedColumn;
+        private int? _selectedRow;
+
         public GameField()
         {
             this.InitializeComponent();
@@ -32,28 +39,39 @@ namespace Determinant.Controls
             _theme = theme;
 
             ResetAllCells();
-            ActiveCell = null;
+            ResetSelected();
         }
 
-        public IEnumerable<MainPageGameFieldCell> GetAllCells()
+        private IEnumerable<GameFieldCell> GetAllCells()
         {
-            return GameFieldGrid.Children.Cast<Border>().Select(x => new MainPageGameFieldCell
+            return GameFieldGrid.Children.Cast<Border>().Select(x => new GameFieldCell
             {
                 Border = x,
                 TextBlock = (TextBlock)x.Child
             });
         }
 
-        public MainPageGameFieldCell ActiveCell { get; set; }
-
         private void ResetAllCells()
         {
-            foreach (var cell in this.GetAllCells())
+            foreach (var cell in GetAllCells())
             {
-                cell.Border.Background = _theme.BackgroundBrush;
-                cell.TextBlock.Text = EmptyCellText;
-                cell.TextBlock.Foreground = _theme.BackgroundBrush;
+                ResetCell(cell);
             }
+        }
+
+        private void ResetCell(GameFieldCell cell)
+        {
+            cell.Border.Background = _theme.BackgroundBrush;
+            cell.TextBlock.Text = EmptyCellText;
+            cell.TextBlock.Foreground = _theme.BackgroundBrush;
+        }
+
+        private void ResetSelected()
+        {
+            _selectedBorder = null;
+            _selectedTextBlock = null;
+            _selectedRow = null;
+            _selectedColumn = null;
         }
 
         public Border GetGameFieldGridElement(MatrixCell cell)
@@ -64,48 +82,31 @@ namespace Determinant.Controls
 
         private void GameFieldGridCell_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var selectedGameFieldGridCell = (Border)sender;
-            var selectedGameFieldGridText = (TextBlock)selectedGameFieldGridCell.Child;
+            var selectedBorder = (Border)sender;
+            var selectedTextBlock = (TextBlock)selectedBorder.Child;
 
-            if (selectedGameFieldGridText.Text != "?") return;
+            // validating tapped cell
+            if (selectedTextBlock.Text != EmptyCellText) return;
 
-         /*   _selectedGameFieldGridCell = selectedGameFieldGridCell;
-            _selectedGameFieldGridText = selectedGameFieldGridText;
+            // set selected
+            _selectedBorder = selectedBorder;
+            _selectedTextBlock = selectedTextBlock;
+            _selectedColumn = Grid.GetColumn(_selectedBorder);
+            _selectedRow = Grid.GetRow(_selectedBorder);
 
-            _selectedGameFieldGridColumn = Grid.GetColumn(_selectedGameFieldGridCell);
-            _selectedGameFieldGridRow = Grid.GetRow(_selectedGameFieldGridCell);   */
-
-            // resetting color for all free cells
-            /*  foreach (var border in GameFieldGrid.Children.Cast<Border>())
-              {
-                  var textBlock = (TextBlock)border.Child;
-                  if (textBlock.Text == "?")
-                  {
-                      textBlock.Foreground = this.Background;
-                      border.Background = this.Background;
-                  }
-              }   */
+            ResetEmptyCells();
 
             // setting selected style for tapped cell
-        //    _selectedGameFieldGridCell.Background = new SolidColorBrush(Colors.PaleGoldenrod);
-        //    _selectedGameFieldGridText.Foreground = new SolidColorBrush(Colors.PaleGoldenrod);
+            _selectedBorder.Background = new SolidColorBrush(Colors.PaleGoldenrod);
+            _selectedTextBlock.Foreground = new SolidColorBrush(Colors.PaleGoldenrod);
         }
-    }
 
-    public class MainPageGameFieldCell
-    {
-        public Border Border { get; set; }
-        public TextBlock TextBlock { get; set; }
-
-        public int? GetValue()
+        private void ResetEmptyCells()
         {
-            int value;
-            if (Int32.TryParse(TextBlock.Text, out value))
+            foreach (var cell in GetAllCells().Where(x => x.IsEmpty))
             {
-                return value;
-            };
-
-            return null;
+                ResetCell(cell);
+            }
         }
     }
 }

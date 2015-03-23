@@ -22,11 +22,6 @@ namespace Determinant
 {
     public sealed partial class MainPage : Page
     {
-        private Border _selectedGameFieldGridCell;
-        private TextBlock _selectedGameFieldGridText;
-        private int? _selectedGameFieldGridColumn;
-        private int? _selectedGameFieldGridRow;
-
         private Game _game;
         private Theme _theme;
 
@@ -38,9 +33,7 @@ namespace Determinant
 
         private void Init()
         {
-            _theme = new Theme(this.Background, this.Foreground);
-
-            // create new game data model
+            _theme = new Theme(this.Foreground, this.Background);
             _game = new SinglePlayerGameBuilder().CreateGame();
 
             // init game elements in user controls
