@@ -29,6 +29,11 @@ namespace Determinant
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
+
+            GameField.OnCellSelected += OnGameFieldCellSelected;
+            GameField.OnCellDeselected += OnGameFieldCellDeselected;
+
+            AvailableNumbers.OnCellSelected += OnAvailableNumbersCellSelected;
         }
 
         private void Init()
@@ -38,7 +43,7 @@ namespace Determinant
 
             // init game elements in user controls
             GameField.Init(_theme);
-            PlayersInfo.Init(_game);
+            PlayersInfo.Init(_game.PositivePlayer.Name, _game.NegativePlayer.Name);
             AvailableNumbers.Init();
 
             // hiding game completed controls
@@ -48,6 +53,23 @@ namespace Determinant
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Init();
+        }
+
+        private void OnGameFieldCellSelected(object sender, EventArgs e)
+        {
+            AvailableNumbers.AllowSelect = true;
+        }
+
+        private void OnGameFieldCellDeselected(object sender, EventArgs e)
+        {
+            AvailableNumbers.AllowSelect = false;
+        }
+
+        private void OnAvailableNumbersCellSelected(object sender, EventArgs e)
+        {
+            var computerPlayerTurnResult = _game.MakeTurn(GameField.SelectedColumn.Value, GameField.SelectedRow.Value, AvailableNumbers.SelectedValue.Value);
+
+            if (_game.IsCompleted) { OnGameCompleted(); }
         }
 
         private void OnGameCompleted()

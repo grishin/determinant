@@ -26,8 +26,12 @@ namespace Determinant.Controls
 
         private Border _selectedBorder;
         private TextBlock _selectedTextBlock;
-        private int? _selectedColumn;
-        private int? _selectedRow;
+        
+        public int? SelectedColumn { get; private set;}
+        public int? SelectedRow {get; private set;}
+
+        public event EventHandler OnCellSelected;
+        public event EventHandler OnCellDeselected();
 
         public GameField()
         {
@@ -70,8 +74,11 @@ namespace Determinant.Controls
         {
             _selectedBorder = null;
             _selectedTextBlock = null;
-            _selectedRow = null;
-            _selectedColumn = null;
+            
+            SelectedRow = null;
+            SelectedColumn = null;
+
+            OnCellDeselected(this, new EventArgs());
         }
 
         public Border GetGameFieldGridElement(MatrixCell cell)
@@ -91,14 +98,16 @@ namespace Determinant.Controls
             // set selected
             _selectedBorder = selectedBorder;
             _selectedTextBlock = selectedTextBlock;
-            _selectedColumn = Grid.GetColumn(_selectedBorder);
-            _selectedRow = Grid.GetRow(_selectedBorder);
+            SelectedColumn = Grid.GetColumn(_selectedBorder);
+            SelectedRow = Grid.GetRow(_selectedBorder);
 
             ResetEmptyCells();
 
             // setting selected style for tapped cell
             _selectedBorder.Background = new SolidColorBrush(Colors.PaleGoldenrod);
             _selectedTextBlock.Foreground = new SolidColorBrush(Colors.PaleGoldenrod);
+
+            OnCellSelected(this, new EventArgs());
         }
 
         private void ResetEmptyCells()

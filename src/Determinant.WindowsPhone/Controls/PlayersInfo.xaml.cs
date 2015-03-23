@@ -23,10 +23,10 @@ namespace Determinant.Controls
             this.InitializeComponent();
         }
 
-        public void Init(Game game)
+        public void Init(string positivePlayerName, string negativePlayerName)
         {
-            PositivePlayerName.Text = game.PositivePlayer.Name;
-            NegativePlayerName.Text = game.NegativePlayer.Name;
+            PositivePlayerName.Text = positivePlayerName;
+            NegativePlayerName.Text = negativePlayerName;
         }
     }
 }

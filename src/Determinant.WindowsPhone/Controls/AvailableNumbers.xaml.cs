@@ -22,6 +22,10 @@ namespace Determinant.Controls
             this.InitializeComponent();
         }
 
+        public bool AllowSelect { get; set; }
+
+        public event EventHandler OnCellSelected;
+
         public void Init()
         {
             foreach (var border in AvailableNumbersGrid.Children.Cast<Border>())
@@ -38,8 +42,15 @@ namespace Determinant.Controls
 
         private void AvailableNumbersGridCell_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var selectedAvailableNumbersGridCell = (Border)sender;
-            var selectedAvailableNumbersGridTextBlock = (TextBlock)selectedAvailableNumbersGridCell.Child;
+            var selectedBorder = (Border)sender;
+            var selecteTextBlock = (TextBlock)selectedBorder.Child;
+
+            if (!AllowSelect) return;
+
+            selectedBorder.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            OnCellSelected(this, new EventArgs());
+
          /*
             if (_selectedGameFieldGridText == null
                 || _selectedGameFieldGridCell == null
@@ -48,9 +59,7 @@ namespace Determinant.Controls
                 ) return;
 
             _selectedGameFieldGridText.Text = selectedAvailableNumbersGridTextBlock.Text;
-            _selectedGameFieldGridText.Foreground = this.Foreground;
-
-            selectedAvailableNumbersGridCell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            _selectedGameFieldGridText.Foreground = this.Foreground;           
             _selectedGameFieldGridCell.Background = this.Background;
 
             var computerPlayerTurnResult = _game.MakeTurn(_selectedGameFieldGridColumn.Value, _selectedGameFieldGridRow.Value, Convert.ToInt32(selectedAvailableNumbersGridTextBlock.Text));
