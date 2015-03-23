@@ -13,8 +13,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace Determinant.Controls
 {
     public sealed partial class AvailableNumbers : UserControl
@@ -36,6 +34,45 @@ namespace Determinant.Controls
         {
             return AvailableNumbersGrid.Children.Cast<Border>()
                 .First(x => ((TextBlock)x.Child).Text == value.ToString());
+        }
+
+        private void AvailableNumbersGridCell_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var selectedAvailableNumbersGridCell = (Border)sender;
+            var selectedAvailableNumbersGridTextBlock = (TextBlock)selectedAvailableNumbersGridCell.Child;
+
+            if (_selectedGameFieldGridText == null
+                || _selectedGameFieldGridCell == null
+                || _selectedGameFieldGridColumn == null
+                || _selectedGameFieldGridRow == null
+                ) return;
+
+            _selectedGameFieldGridText.Text = selectedAvailableNumbersGridTextBlock.Text;
+            _selectedGameFieldGridText.Foreground = this.Foreground;
+
+            selectedAvailableNumbersGridCell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            _selectedGameFieldGridCell.Background = this.Background;
+
+            var computerPlayerTurnResult = _game.MakeTurn(_selectedGameFieldGridColumn.Value, _selectedGameFieldGridRow.Value, Convert.ToInt32(selectedAvailableNumbersGridTextBlock.Text));
+
+            _selectedGameFieldGridCell = null;
+            _selectedGameFieldGridText = null;
+            _selectedGameFieldGridColumn = null;
+            _selectedGameFieldGridRow = null;
+
+            if (computerPlayerTurnResult != null)
+            {
+                var availableNumbersGridCell = GetAvailableNumbersGridElement(computerPlayerTurnResult.Value);
+                availableNumbersGridCell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+                /*    var gameFieldGridCell = GetGameFieldGridElement(computerPlayerTurnResult.Cell);
+                    var gameFieldGridText = (TextBlock)gameFieldGridCell.Child;
+                    gameFieldGridText.Text = computerPlayerTurnResult.Value.ToString();
+                    gameFieldGridText.Foreground = new SolidColorBrush(Colors.Purple);
+                    gameFieldGridText.Visibility = Windows.UI.Xaml.Visibility.Visible;  */
+            }
+
+            if (_game.IsCompleted) { OnGameCompleted(); }
         }
     }
 }

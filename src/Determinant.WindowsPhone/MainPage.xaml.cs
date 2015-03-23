@@ -33,7 +33,6 @@ namespace Determinant
         public MainPage()
         {
             this.InitializeComponent();
-
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
@@ -44,70 +43,18 @@ namespace Determinant
             // create new game data model
             _game = new SinglePlayerGameBuilder().CreateGame();
 
+            // init game elements in user controls
             GameField.Init(_theme);
             PlayersInfo.Init(_game);
+            AvailableNumbers.Init();
 
             // hiding game completed controls
-            Winner.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            Restart.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-
-            // set visible to availablenumbers grid buttons 
-            AvailableNumbers.Init();
+            WinnerBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
-        /// <summary>
-        /// Invoked when this page is about to be displayed in a Frame.
-        /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Init();
-        }
-
-        private Border GetAvailableNumbersGridElement(int value)
-        {
-            return AvailableNumbersGrid.Children.Cast<Border>()
-                .First(x => ((TextBlock)x.Child).Text == value.ToString());
-        }
-
-        private void AvailableNumbersGridCell_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            var selectedAvailableNumbersGridCell = (Border)sender;
-            var selectedAvailableNumbersGridTextBlock = (TextBlock)selectedAvailableNumbersGridCell.Child;
-
-            if (_selectedGameFieldGridText == null
-                || _selectedGameFieldGridCell == null
-                || _selectedGameFieldGridColumn == null
-                || _selectedGameFieldGridRow == null
-                ) return;
-
-            _selectedGameFieldGridText.Text = selectedAvailableNumbersGridTextBlock.Text;
-            _selectedGameFieldGridText.Foreground = this.Foreground;
-
-            selectedAvailableNumbersGridCell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            _selectedGameFieldGridCell.Background = this.Background;
-
-            var computerPlayerTurnResult = _game.MakeTurn(_selectedGameFieldGridColumn.Value, _selectedGameFieldGridRow.Value, Convert.ToInt32(selectedAvailableNumbersGridTextBlock.Text));
-
-            _selectedGameFieldGridCell = null;
-            _selectedGameFieldGridText = null;
-            _selectedGameFieldGridColumn = null;
-            _selectedGameFieldGridRow = null;
-
-            if (computerPlayerTurnResult != null)
-            {
-                var availableNumbersGridCell = GetAvailableNumbersGridElement(computerPlayerTurnResult.Value);
-                availableNumbersGridCell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-
-            /*    var gameFieldGridCell = GetGameFieldGridElement(computerPlayerTurnResult.Cell);
-                var gameFieldGridText = (TextBlock)gameFieldGridCell.Child;
-                gameFieldGridText.Text = computerPlayerTurnResult.Value.ToString();
-                gameFieldGridText.Foreground = new SolidColorBrush(Colors.Purple);
-                gameFieldGridText.Visibility = Windows.UI.Xaml.Visibility.Visible;  */
-            }
-
-            if (_game.IsCompleted) { OnGameCompleted(); }
         }
 
         private void OnGameCompleted()
@@ -121,8 +68,7 @@ namespace Determinant
                 Winner.Text = "DRAW";
             }
 
-            Winner.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            Restart.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            WinnerBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         private void Restart_Tapped(object sender, TappedRoutedEventArgs e)

@@ -8,8 +8,46 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-    
-    <Grid>
 
+    <Grid Name="AvailableNumbersGrid" Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Margin="2" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Tapped="AvailableNumbersGridCell_Tapped"   >
+            <TextBlock Text="1" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+        </Border>
+        <Border Margin="2" Grid.Column="1" BorderBrush="Gray" BorderThickness="1" Tapped="AvailableNumbersGridCell_Tapped"  >
+            <TextBlock Text="2" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+        </Border>
+        <Border Margin="2" Grid.Column="2" BorderBrush="Gray" BorderThickness="1" Tapped="AvailableNumbersGridCell_Tapped"  >
+            <TextBlock Text="3" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+        </Border>
+        <Border Margin="2" Grid.Column="3" BorderBrush="Gray" BorderThickness="1" Tapped="AvailableNumbersGridCell_Tapped" >
+            <TextBlock Text="4" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+        </Border>
+        <Border Margin="2" Grid.Column="4" BorderBrush="Gray" BorderThickness="1" Tapped="AvailableNumbersGridCell_Tapped" >
+            <TextBlock Text="5" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+        </Border>
+        <Border Margin="2" Grid.Column="5" BorderBrush="Gray" BorderThickness="1" Tapped="AvailableNumbersGridCell_Tapped" >
+            <TextBlock Text="6" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+        </Border>
+        <Border Margin="2" Grid.Column="6" BorderBrush="Gray" BorderThickness="1" Tapped="AvailableNumbersGridCell_Tapped" >
+            <TextBlock Text="7" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+        </Border>
+        <Border Margin="2" Grid.Column="7" BorderBrush="Gray" BorderThickness="1" Tapped="AvailableNumbersGridCell_Tapped" >
+            <TextBlock Text="8" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+        </Border>
+        <Border Margin="2" Grid.Column="8" BorderBrush="Gray" BorderThickness="1" Tapped="AvailableNumbersGridCell_Tapped">
+            <TextBlock Text="9" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+        </Border>
     </Grid>
 </UserControl>
