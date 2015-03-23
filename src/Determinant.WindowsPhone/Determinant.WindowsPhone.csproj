@@ -90,11 +90,14 @@
     <Compile Include="Controls\GameField.xaml.cs">
       <DependentUpon>GameField.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PlayersInfo.xaml.cs">
+      <DependentUpon>PlayersInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\Theme.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\MainPageModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -111,6 +114,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\GameField.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PlayersInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

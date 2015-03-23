@@ -9,7 +9,46 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <StackPanel>
-        <TextBlock Text="AAAA" Foreground="Red" FontSize="50"></TextBlock>
-    </StackPanel>
+    <Grid Name="GameFieldGrid" Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" Grid.Row="0" Grid.Column="0" Tapped="GameFieldGridCell_Tapped"  >
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="1" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X0Y0"  />
+        </Border>
+        <Border BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" Grid.Row="0" Grid.Column="1" Tapped="GameFieldGridCell_Tapped">
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="2" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X1Y0" />
+        </Border>
+        <Border BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" Grid.Row="0" Grid.Column="2" Tapped="GameFieldGridCell_Tapped">
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="3" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X2Y0" />
+        </Border>
+
+        <Border BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" Grid.Row="1" Grid.Column="0" Tapped="GameFieldGridCell_Tapped">
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="4" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X0Y1" />
+        </Border>
+        <Border BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" Grid.Row="1" Grid.Column="1" Tapped="GameFieldGridCell_Tapped">
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="5" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X1Y1" />
+        </Border>
+        <Border BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" Grid.Row="1" Grid.Column="2" Tapped="GameFieldGridCell_Tapped">
+            <TextBlock Grid.Row="1" Grid.Column="2" Text="6" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X2Y1" />
+        </Border>
+
+        <Border BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" Grid.Row="2" Grid.Column="0" Tapped="GameFieldGridCell_Tapped">
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="7" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X0Y2" />
+        </Border>
+        <Border BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" Grid.Row="2" Grid.Column="1" Tapped="GameFieldGridCell_Tapped">
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="8" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X1Y2" />
+        </Border>
+        <Border BorderBrush="{StaticResource PhoneAccentBrush}" BorderThickness="2" Grid.Row="2" Grid.Column="2" Tapped="GameFieldGridCell_Tapped">
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="9" FontSize="128" VerticalAlignment="Center" HorizontalAlignment="Center" Tag="X2Y2" />
+        </Border>
+    </Grid>
 </UserControl>
