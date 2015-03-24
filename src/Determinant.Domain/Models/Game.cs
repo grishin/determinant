@@ -18,7 +18,8 @@ namespace Determinant.Domain.Models
         public IPlayer CurrentPlayer { get; private set; }
         public IPlayer PositivePlayer { get { return _players.First(x => x.Goal == PlayerGoal.Positive); } }
         public IPlayer NegativePlayer { get { return _players.First(x => x.Goal == PlayerGoal.Negative); } }
-        public ComputerPlayer ComputerPlayer { get { return (ComputerPlayer)_players.FirstOrDefault(x => x is ComputerPlayer); } }
+        
+        private ComputerPlayer ComputerPlayer { get { return (ComputerPlayer)_players.FirstOrDefault(x => x is ComputerPlayer); } }
 
         public event EventHandler<GameCompletedEventArgs> OnCompleted;
         public event EventHandler<TurnEventArgs> OnHumanPlayerTurn;
