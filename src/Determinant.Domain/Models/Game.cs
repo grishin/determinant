@@ -84,7 +84,7 @@ namespace Determinant.Domain.Models
                     winner = null;
                 }
 
-                OnCompleted(this, new EventArgs());
+                OnCompleted(this, new GameCompletedEventArgs { Determinant = determinant, WinnerPlayer = winner });
             }
         }
     }

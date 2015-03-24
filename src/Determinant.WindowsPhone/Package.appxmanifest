@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="f61e476c-1efe-4f0e-acc1-fb2a64f3a685" Publisher="CN=Андрей" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="f61e476c-1efe-4f0e-acc1-fb2a64f3a685" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="18140AndreyGrishin.DeterminantGame" Publisher="CN=B80B4A96-768C-4996-A42F-731E892903E4" Version="1.1.0.1" />
+  <mp:PhoneIdentity PhoneProductId="08593edc-a0f9-4f7b-9d0e-1ecbdc0a8af4" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>Determinant</DisplayName>
+    <DisplayName>Determinant Game</DisplayName>
     <PublisherDisplayName>Andrey Grishin</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -16,7 +16,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Determinant.WindowsPhone.App">
-      <m3:VisualElements DisplayName="Determinant" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="Determinant" ForegroundText="light" BackgroundColor="transparent">
+      <m3:VisualElements DisplayName="Determinant Game" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="Determinant" ForegroundText="light" BackgroundColor="transparent">
         <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\Square71x71Logo.png">
         </m3:DefaultTile>
         <m3:SplashScreen Image="Assets\SplashScreen.png" />
