@@ -23,6 +23,8 @@ namespace Determinant.Controls
         }
 
         public bool AllowSelect { get; set; }
+                      
+        public int? SelectedValue { get; private set; }
 
         public event EventHandler OnCellSelected;
 

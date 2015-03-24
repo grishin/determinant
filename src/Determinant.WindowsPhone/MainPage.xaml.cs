@@ -68,6 +68,7 @@ namespace Determinant
         private void OnAvailableNumbersCellSelected(object sender, EventArgs e)
         {
             var computerPlayerTurnResult = _game.MakeTurn(GameField.SelectedColumn.Value, GameField.SelectedRow.Value, AvailableNumbers.SelectedValue.Value);
+            //GameField.Res
 
             if (_game.IsCompleted) { OnGameCompleted(); }
         }

@@ -31,7 +31,7 @@ namespace Determinant.Controls
         public int? SelectedRow {get; private set;}
 
         public event EventHandler OnCellSelected;
-        public event EventHandler OnCellDeselected();
+        public event EventHandler OnCellDeselected;
 
         public GameField()
         {
@@ -43,6 +43,11 @@ namespace Determinant.Controls
             _theme = theme;
 
             ResetAllCells();
+            ResetSelected();
+        }
+
+        public void SetValue(int value)
+        {
             ResetSelected();
         }
 
@@ -81,11 +86,7 @@ namespace Determinant.Controls
             OnCellDeselected(this, new EventArgs());
         }
 
-        public Border GetGameFieldGridElement(MatrixCell cell)
-        {
-            return GameFieldGrid.Children.Cast<Border>()
-                .First(x => Grid.GetRow(x) == cell.Row && Grid.GetColumn(x) == cell.Column);
-        }
+        
 
         private void GameFieldGridCell_Tapped(object sender, TappedRoutedEventArgs e)
         {
