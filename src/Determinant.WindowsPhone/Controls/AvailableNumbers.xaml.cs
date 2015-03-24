@@ -36,10 +36,16 @@ namespace Determinant.Controls
             }
         }
 
-        private Border GetAvailableNumbersGridElement(int value)
+        private Border GetCell(int value)
         {
             return AvailableNumbersGrid.Children.Cast<Border>()
                 .First(x => ((TextBlock)x.Child).Text == value.ToString());
+        }
+
+        public void HideValue(int value)
+        {
+            var cell = GetCell(value);
+            cell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
         private void AvailableNumbersGridCell_Tapped(object sender, TappedRoutedEventArgs e)
@@ -54,22 +60,13 @@ namespace Determinant.Controls
             OnCellSelected(this, new EventArgs());
 
          /*
-            if (_selectedGameFieldGridText == null
-                || _selectedGameFieldGridCell == null
-                || _selectedGameFieldGridColumn == null
-                || _selectedGameFieldGridRow == null
-                ) return;
-
             _selectedGameFieldGridText.Text = selectedAvailableNumbersGridTextBlock.Text;
             _selectedGameFieldGridText.Foreground = this.Foreground;           
             _selectedGameFieldGridCell.Background = this.Background;
 
             var computerPlayerTurnResult = _game.MakeTurn(_selectedGameFieldGridColumn.Value, _selectedGameFieldGridRow.Value, Convert.ToInt32(selectedAvailableNumbersGridTextBlock.Text));
 
-            _selectedGameFieldGridCell = null;
-            _selectedGameFieldGridText = null;
-            _selectedGameFieldGridColumn = null;
-            _selectedGameFieldGridRow = null;
+            
            
             if (computerPlayerTurnResult != null)
             {

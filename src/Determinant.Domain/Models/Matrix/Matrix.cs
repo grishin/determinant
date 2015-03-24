@@ -8,11 +8,11 @@ namespace Determinant.Domain.Models.Matrix
 {
     public class Matrix3x3 : IMatrix
     {
-        private int?[,] _matrix = new int?[SizeX, SizeY];
+        private int?[,] _matrix = new int?[Columns, Rows];
         private int[] _allValues = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        public const int SizeX = 3;
-        public const int SizeY = 3;
+        public const int Columns = 3;
+        public const int Rows = 3;
 
         public const int MinValue = 1;
         public const int MaxValue = 9;
@@ -24,8 +24,8 @@ namespace Determinant.Domain.Models.Matrix
 
         private bool ValidateCellPosition(int x, int y)
         {
-            if (x > 0 && x < SizeX) return true;
-            if (y > 0 && y < SizeY) return true;
+            if (x > 0 && x < Columns) return true;
+            if (y > 0 && y < Rows) return true;
 
             return false;
         }
@@ -39,9 +39,9 @@ namespace Determinant.Domain.Models.Matrix
 
         private void InitMatrix()
         {
-            for (int x = 0; x < SizeX; x++)
+            for (int x = 0; x < Columns; x++)
             {
-                for (int y = 0; y < SizeY; y++)
+                for (int y = 0; y < Rows; y++)
                 {
                     _matrix[x, y] = null;
                 }
@@ -52,9 +52,9 @@ namespace Determinant.Domain.Models.Matrix
         {
             var usedValues = new List<int>();
 
-            for (int x = 0; x < SizeX; x++)
+            for (int x = 0; x < Columns; x++)
             {
-                for (int y = 0; y < SizeY; y++)
+                for (int y = 0; y < Rows; y++)
                 {
                     if (_matrix[x, y] != null)
                     {
@@ -72,18 +72,18 @@ namespace Determinant.Domain.Models.Matrix
             return allValues.Except(GetUsedValues());
         }
 
-        public bool IsCellEmpty(int x, int y)
+        public bool IsCellEmpty(MatrixCell cell)
         {
-            return GetValue(x, y) == null;
+            return GetValue(cell) == null;
         }
 
         public IEnumerable<MatrixCell> GetAvailableCells()
         {
             var availableCells = new List<MatrixCell>();
 
-            for (int x = 0; x < SizeX; x++)
+            for (int x = 0; x < Columns; x++)
             {
-                for (int y = 0; y < SizeY; y++)
+                for (int y = 0; y < Rows; y++)
                 {
                     if (_matrix[x, y] == null)
                     {
@@ -101,9 +101,9 @@ namespace Determinant.Domain.Models.Matrix
         /// <param name="x">Zero-based horizontal cell position</param>
         /// <param name="y">Zero-based vertical cell position</param>
         /// <returns>Cell value</returns>
-        public int? GetValue(int x, int y)
+        public int? GetValue(MatrixCell cell)
         {
-            return _matrix[x, y];
+            return _matrix[cell.Column, cell.Row];
         }
 
 
@@ -113,11 +113,11 @@ namespace Determinant.Domain.Models.Matrix
         /// <param name="x">Zero-based horizontal cell position</param>
         /// <param name="y">Zero-based vertical cell position</param>
         /// <param name="value">Cell value</param>
-        public void SetValue(int x, int y, int value)
+        public void SetValue(MatrixCell cell, int value)
         {
-           if (GetValue(x, y) == null && x < SizeX && y < SizeY && value <= MaxValue)
+           if (GetValue(cell) == null && cell.Column < Columns && cell.Row < Rows && value > 0 && value <= MaxValue)
            {
-               _matrix[x, y] = value;     
+               _matrix[cell.Column, cell.Row] = value;     
            }            
         }
   
@@ -140,9 +140,9 @@ namespace Determinant.Domain.Models.Matrix
 
         public bool IsFull()
         {
-            for (int x = 0; x < SizeX; x++)
+            for (int x = 0; x < Columns; x++)
             {
-                for (int y = 0; y < SizeY; y++)
+                for (int y = 0; y < Rows; y++)
                 {
                     if (_matrix[x, y] == null) { return false; };
                 }

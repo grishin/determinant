@@ -22,6 +22,12 @@ namespace Determinant.Domain.Models
         public IPlayer PositivePlayer { get; private set;}
         public IPlayer NegativePlayer { get; private set;}
 
+        public event EventHandler OnCreated;
+        public event EventHandler OnCompleted;
+        public event EventHandler OnHumanPlayerTurn;
+        public event EventHandler OnComputerPlayerTurn;
+
+
         public Game(IPlayer positivePlayer, IPlayer negativePlayer)
         {
             PositivePlayer = positivePlayer;
@@ -35,64 +41,52 @@ namespace Determinant.Domain.Models
             IsCompleted = false;
             Winner = null;
 
-
-
+            OnCreated(this, new EventArgs());
         }
 
-        public TurnResult MakeTurn(int posx, int posy, int value)
+        public void MakeHumanPlayerTurn(MatrixCell cell, int value)
         {
-            TurnResult computerPlayerTurnResult = null;
-
-            foreach (var player in _players)
-            {
-                if (player is HumanPlayer)
-                {
-                    _matrix.SetValue(posx, posy, value);
-                }
-                else if (player is ComputerPlayer)
-                {
-                    computerPlayerTurnResult = (player as ComputerPlayer).MakeTurn(_matrix);
-                    _matrix.SetValue(computerPlayerTurnResult.Cell.Column, computerPlayerTurnResult.Cell.Row, computerPlayerTurnResult.Value);
-                }
-
-                if (_matrix.IsFull())
-                {
-                    int determinant = _matrix.GetDeterminant();
-
-                    if (determinant > 0)
-                    {
-                        Winner = PositivePlayer;
-                    }
-                    else if (determinant < 0)
-                    {
-                        Winner = NegativePlayer;
-                    }
-                    else
-                    {
-                        Winner = null;
-                    }
-
-                    IsCompleted = true;
-
-                    return null;
-                }
-            }
-
-            return computerPlayerTurnResult;
-        }
-
-        private void CheckGameCompleted()
-        {
+            _matrix.SetValue(cell, value);
             
+            CheckIfCompleted();
         }
 
-    }
+        public TurnResult MakeComputerPlayerTurn()
+        {
+            var player = _players.FirstOrDefault(x => x is ComputerPlayer);
+            if (player == null) { return null; }
 
-    public enum Winner
-    {
-        None = 0,
-        Positive = 1,
-        Negative = 2,
-        Draw = 3
+            var turnResult = (player as ComputerPlayer).MakeTurn(_matrix);
+            _matrix.SetValue(turnResult.Cell, turnResult.Value);
+
+            CheckIfCompleted();
+
+            return turnResult;
+        }
+
+        private void CheckIfCompleted()
+        {
+            if (_matrix.IsFull())
+            {
+                int determinant = _matrix.GetDeterminant();
+
+                if (determinant > 0)
+                {
+                    Winner = PositivePlayer;
+                }
+                else if (determinant < 0)
+                {
+                    Winner = NegativePlayer;
+                }
+                else
+                {
+                    Winner = null;
+                }
+
+                IsCompleted = true;
+
+                OnCompleted(this, new EventArgs());
+            }
+        }
     }
 }

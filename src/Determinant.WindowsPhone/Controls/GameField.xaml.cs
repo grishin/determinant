@@ -24,11 +24,10 @@ namespace Determinant.Controls
         private Theme _theme;
         private const string EmptyCellText = "?";
 
-        private Border _selectedBorder;
-        private TextBlock _selectedTextBlock;
-        
-        public int? SelectedColumn { get; private set;}
-        public int? SelectedRow {get; private set;}
+        private GameFieldCell _selectedCell;
+
+        public int? SelectedColumn { get; private set; }
+        public int? SelectedRow { get; private set; }
 
         public event EventHandler OnCellSelected;
         public event EventHandler OnCellDeselected;
@@ -42,13 +41,22 @@ namespace Determinant.Controls
         {
             _theme = theme;
 
-            ResetAllCells();
+            ResetAllCellsVisual();
             ResetSelected();
+        }
+
+        public void SetValue(MatrixCell cell, int value)
+        {
+            var gameFieldCell = GetCell(cell);
+            gameFieldCell.TextBlock.Text = value.ToString();
         }
 
         public void SetValue(int value)
         {
+            _selectedCell.TextBlock.Text = value.ToString();
+
             ResetSelected();
+            ResetCellVisual(_selectedCell);
         }
 
         private IEnumerable<GameFieldCell> GetAllCells()
@@ -60,15 +68,28 @@ namespace Determinant.Controls
             });
         }
 
-        private void ResetAllCells()
+        private GameFieldCell GetCell(MatrixCell cell)
+        {
+            return GameFieldGrid
+                .Children
+                .Cast<Border>()
+                .Where(x => Grid.GetColumn(x) == cell.Column && Grid.GetRow(x) == cell.Row)
+                .Select(x => new GameFieldCell
+                {
+                    Border = x,
+                    TextBlock = (TextBlock)x.Child
+                }).First();
+        }
+
+        private void ResetAllCellsVisual()
         {
             foreach (var cell in GetAllCells())
             {
-                ResetCell(cell);
+                ResetCellVisual(cell);
             }
         }
 
-        private void ResetCell(GameFieldCell cell)
+        private void ResetCellVisual(GameFieldCell cell)
         {
             cell.Border.Background = _theme.BackgroundBrush;
             cell.TextBlock.Text = EmptyCellText;
@@ -77,16 +98,13 @@ namespace Determinant.Controls
 
         private void ResetSelected()
         {
-            _selectedBorder = null;
-            _selectedTextBlock = null;
-            
+            _selectedCell = null;
+
             SelectedRow = null;
             SelectedColumn = null;
 
             OnCellDeselected(this, new EventArgs());
         }
-
-        
 
         private void GameFieldGridCell_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -97,16 +115,20 @@ namespace Determinant.Controls
             if (selectedTextBlock.Text != EmptyCellText) return;
 
             // set selected
-            _selectedBorder = selectedBorder;
-            _selectedTextBlock = selectedTextBlock;
-            SelectedColumn = Grid.GetColumn(_selectedBorder);
-            SelectedRow = Grid.GetRow(_selectedBorder);
+            _selectedCell = new GameFieldCell
+            {
+                Border = selectedBorder,
+                TextBlock = selectedTextBlock
+            };
+
+            SelectedColumn = Grid.GetColumn(_selectedCell.Border);
+            SelectedRow = Grid.GetRow(_selectedCell.Border);
 
             ResetEmptyCells();
 
             // setting selected style for tapped cell
-            _selectedBorder.Background = new SolidColorBrush(Colors.PaleGoldenrod);
-            _selectedTextBlock.Foreground = new SolidColorBrush(Colors.PaleGoldenrod);
+            _selectedCell.Border.Background = new SolidColorBrush(Colors.PaleGoldenrod);
+            _selectedCell.TextBlock.Foreground = new SolidColorBrush(Colors.PaleGoldenrod);
 
             OnCellSelected(this, new EventArgs());
         }
@@ -115,7 +137,7 @@ namespace Determinant.Controls
         {
             foreach (var cell in GetAllCells().Where(x => x.IsEmpty))
             {
-                ResetCell(cell);
+                ResetCellVisual(cell);
             }
         }
     }

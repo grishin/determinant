@@ -23,7 +23,6 @@ namespace Determinant
     public sealed partial class MainPage : Page
     {
         private Game _game;
-        private Theme _theme;
 
         public MainPage()
         {
@@ -34,15 +33,20 @@ namespace Determinant
             GameField.OnCellDeselected += OnGameFieldCellDeselected;
 
             AvailableNumbers.OnCellSelected += OnAvailableNumbersCellSelected;
+
+            _game.OnCreated += OnGameCreated;
+            _game.OnCompleted += OnGameCompleted;
         }
 
         private void Init()
         {
-            _theme = new Theme(this.Foreground, this.Background);
             _game = new SinglePlayerGameBuilder().CreateGame();
+        }
 
+        private void OnGameCreated(object sender, EventArgs e)
+        {
             // init game elements in user controls
-            GameField.Init(_theme);
+            GameField.Init(new Theme(this.Foreground, this.Background));
             PlayersInfo.Init(_game.PositivePlayer.Name, _game.NegativePlayer.Name);
             AvailableNumbers.Init();
 
@@ -67,23 +71,24 @@ namespace Determinant
 
         private void OnAvailableNumbersCellSelected(object sender, EventArgs e)
         {
-            var computerPlayerTurnResult = _game.MakeTurn(GameField.SelectedColumn.Value, GameField.SelectedRow.Value, AvailableNumbers.SelectedValue.Value);
-            //GameField.Res
+            if (GameField.SelectedColumn == null || GameField.SelectedRow == null || AvailableNumbers.SelectedValue == null) return;
+                                                       
+            int column = GameField.SelectedColumn.Value;
+            int row = GameField.SelectedRow.Value;
+            int value = AvailableNumbers.SelectedValue.Value;
 
-            if (_game.IsCompleted) { OnGameCompleted(); }
+            _game.MakeHumanPlayerTurn(new MatrixCell { Row = row, Column = column}, value);
+            GameField.SetValue(value);
+
+            // hardcoded computer player turn
+            var turnResult = _game.MakeComputerPlayerTurn();
+            GameField.SetValue(turnResult.Cell, turnResult.Value);
+            
         }
 
-        private void OnGameCompleted()
+        private void OnGameCompleted(object sender, EventArgs e)
         {
-            if (_game.Winner != null)
-            {
-                Winner.Text = "Winner is " + _game.Winner.Name;
-            }
-            else
-            {
-                Winner.Text = "DRAW";
-            }
-
+            Winner.Text = _game.Winner != null ? "Winner is " + _game.Winner.Name : "DRAW";
             WinnerBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
