@@ -56,31 +56,9 @@ namespace Determinant.Controls
             if (!AllowSelect) return;
 
             selectedBorder.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-
             SelectedValue = Convert.ToInt32(selecteTextBlock.Text);
 
             OnCellSelected(this, new EventArgs());
-
-         /*
-            
-
-            var computerPlayerTurnResult = _game.MakeTurn(_selectedGameFieldGridColumn.Value, _selectedGameFieldGridRow.Value, Convert.ToInt32(selectedAvailableNumbersGridTextBlock.Text));
-
-            
-           
-            if (computerPlayerTurnResult != null)
-            {
-                var availableNumbersGridCell = GetAvailableNumbersGridElement(computerPlayerTurnResult.Value);
-                availableNumbersGridCell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-
-                /*    var gameFieldGridCell = GetGameFieldGridElement(computerPlayerTurnResult.Cell);
-                    var gameFieldGridText = (TextBlock)gameFieldGridCell.Child;
-                    gameFieldGridText.Text = computerPlayerTurnResult.Value.ToString();
-                    gameFieldGridText.Foreground = new SolidColorBrush(Colors.Purple);
-                    gameFieldGridText.Visibility = Windows.UI.Xaml.Visibility.Visible;  
-            }
-
-            if (_game.IsCompleted) { OnGameCompleted(); }    */
         }
     }
 }

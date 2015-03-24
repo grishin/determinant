@@ -1,5 +1,6 @@
 ﻿using Determinant.Domain.Models.Matrix;
 using Determinant.Domain.Models.Player;
+using Determinant.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,54 +12,55 @@ namespace Determinant.Domain.Models
     public class Game
     {
         public bool IsCompleted { get; private set; }
-        public IPlayer Winner { get; private set; }
-        public IPlayer CurrentPlayer { get; private set; }
-
+        
         private Matrix3x3 _matrix;
         private IEnumerable<IPlayer> _players;
 
-        private const int MaxPlayers = 2;
+        public IPlayer CurrentPlayer { get; private set; }
+        public IPlayer PositivePlayer { get { return _players.First(x => x.Goal == PlayerGoal.Positive); } }
+        public IPlayer NegativePlayer { get { return _players.First(x => x.Goal == PlayerGoal.Negative); } }
+        public ComputerPlayer ComputerPlayer { get { return (ComputerPlayer)_players.FirstOrDefault(x => x is ComputerPlayer); } }
 
-        public IPlayer PositivePlayer { get; private set;}
-        public IPlayer NegativePlayer { get; private set;}
+        public event EventHandler<GameCompletedEventArgs> OnCompleted;
+        public event EventHandler<TurnEventArgs> OnHumanPlayerTurn;
+        public event EventHandler<TurnEventArgs> OnComputerPlayerTurn;
 
-        public GameMode Mode { get; private set; }
-
-        public event EventHandler OnCompleted;
-        public event EventHandler OnHumanPlayerTurn;
-        public event EventHandler OnComputerPlayerTurn;
-
-
-        public Game(IPlayer positivePlayer, IPlayer negativePlayer)
+        public Game(IEnumerable<IPlayer> players)
         {
-            PositivePlayer = positivePlayer;
-            NegativePlayer = negativePlayer;
-
+            _players = players;
             _matrix = new Matrix3x3();
-            _players = new [] { PositivePlayer, NegativePlayer };
-
-            Mode = _players.Any(x => x is ComputerPlayer) ? GameMode.SinglePlayer : GameMode.MultiPlayer;
-
-            IsCompleted = false;
-            Winner = null;
         }
 
-        public void MakeHumanPlayerTurn(MatrixCell cell, int value)
+        public void MakeTurn(MatrixCell cell, int value)
         {
-            _matrix.SetValue(cell, value);
-            
-            CheckIfCompleted();
+            ChangePlayer();
+            MakeHumanPlayerTurn(cell, value);
+
+            if (ComputerPlayer != null && !IsCompleted)
+            {
+                ChangePlayer();
+                MakeComputerPlayerTurn();
+            }
         }
 
-        public TurnResult MakeComputerPlayerTurn()
+        private void ChangePlayer()
         {
-            var player = _players.FirstOrDefault(x => x is ComputerPlayer);
-            if (player == null) { return null; }
+            CurrentPlayer = _players.First(x => x != CurrentPlayer);
+        }
 
-            var turnResult = (player as ComputerPlayer).MakeTurn(_matrix);
-            _matrix.SetValue(turnResult.Cell, turnResult.Value);
-
+        private void MakeHumanPlayerTurn(MatrixCell cell, int value)
+        {
+            _matrix.SetValue(cell, value);             
             CheckIfCompleted();
+            OnHumanPlayerTurn(this, new TurnEventArgs { Cell = cell, Value = value });
+        }
+
+        private TurnResult MakeComputerPlayerTurn()
+        {
+            var turnResult = ComputerPlayer.MakeTurn(_matrix);
+            _matrix.SetValue(turnResult.Cell, turnResult.Value); 
+            CheckIfCompleted();
+            OnComputerPlayerTurn(this, new TurnEventArgs { Cell = turnResult.Cell, Value = turnResult.Value });
 
             return turnResult;
         }
@@ -68,30 +70,22 @@ namespace Determinant.Domain.Models
             if (_matrix.IsFull())
             {
                 int determinant = _matrix.GetDeterminant();
-
+                IPlayer winner;
                 if (determinant > 0)
                 {
-                    Winner = PositivePlayer;
+                    winner = PositivePlayer;
                 }
                 else if (determinant < 0)
                 {
-                    Winner = NegativePlayer;
+                    winner = NegativePlayer;
                 }
                 else
                 {
-                    Winner = null;
+                    winner = null;
                 }
-
-                IsCompleted = true;
 
                 OnCompleted(this, new EventArgs());
             }
         }
-    }
-
-    public enum GameMode
-    {
-        SinglePlayer = 1,
-        MultiPlayer = 2
     }
 }

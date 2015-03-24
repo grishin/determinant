@@ -2,6 +2,7 @@
 using Determinant.Domain.Models.Matrix;
 using Determinant.Domain.Services.Game;
 using Determinant.Helpers;
+using Determinant.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,6 +40,8 @@ namespace Determinant
         {
             _game = new SinglePlayerGameBuilder().CreateGame();
             _game.OnCompleted += OnGameCompleted;
+            _game.OnComputerPlayerTurn += OnComputerPlayerTurn;
+            _game.OnHumanPlayerTurn += OnHumanPlayerTurn;
 
             // init game elements in user controls
             GameField.Init(new Theme(this.Foreground, this.Background));
@@ -71,35 +74,29 @@ namespace Determinant
         {
             if (GameField.SelectedColumn == null || GameField.SelectedRow == null || AvailableNumbers.SelectedValue == null) return;
 
-            MakeHumanPlayerTurn();
-
-            if (_game.Mode == GameMode.SinglePlayer && !_game.IsCompleted)
-            {
-                MakeComputerPlayerTurn();
-            }
-        }
-
-        private void MakeComputerPlayerTurn()
-        {
-            var turnResult = _game.MakeComputerPlayerTurn();
-            GameField.SetValue(turnResult.Cell, turnResult.Value);
-            AvailableNumbers.HideValue(turnResult.Value);
-        }
-
-        private void MakeHumanPlayerTurn()
-        {
             int column = GameField.SelectedColumn.Value;
             int row = GameField.SelectedRow.Value;
             int value = AvailableNumbers.SelectedValue.Value;
 
-            _game.MakeHumanPlayerTurn(new MatrixCell { Row = row, Column = column }, value);
-            GameField.SetValue(value);
-            AvailableNumbers.HideValue(value);
+            _game.MakeTurn(new MatrixCell { Row = row, Column = column }, value);
         }
 
-        private void OnGameCompleted(object sender, EventArgs e)
+        private void OnComputerPlayerTurn(object sender, TurnEventArgs e)
         {
-            Winner.Text = _game.Winner != null ? "Winner is " + _game.Winner.Name : "DRAW";
+            GameField.SetValue(e.Cell, e.Value, _game.CurrentPlayer.Goal == Domain.Models.Player.PlayerGoal.Negative );
+            AvailableNumbers.HideValue(e.Value);
+        }
+
+        private void OnHumanPlayerTurn(object sender, TurnEventArgs e)
+        {
+            GameField.SetValue(e.Value, _game.CurrentPlayer.Goal == Domain.Models.Player.PlayerGoal.Negative);
+            AvailableNumbers.HideValue(e.Value);
+        }
+
+        private void OnGameCompleted(object sender, GameCompletedEventArgs e)
+        {
+            Winner.Text = e.WinnerPlayer != null ? String.Format("Winner is {0} ({1})", e.WinnerPlayer.Name, e.Determinant) : "DRAW";
+            
             Winner.Visibility = Windows.UI.Xaml.Visibility.Visible;
             Restart.Visibility = Windows.UI.Xaml.Visibility.Visible;
             PlayersInfo.Visibility = Windows.UI.Xaml.Visibility.Collapsed;

@@ -19,7 +19,7 @@ namespace Determinant.Domain.Models.AI
 
         public string Name
         {
-            get { return "Random"; }
+            get { return "Dummy"; }
         }
 
         public TurnResult MakeTurn(IMatrix matrix)

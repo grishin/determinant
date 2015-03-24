@@ -45,18 +45,18 @@ namespace Determinant.Controls
             ResetSelected();
         }
 
-        public void SetValue(MatrixCell cell, int value)
+        public void SetValue(MatrixCell cell, int value, bool isAlternateColor)
         {
             var gameFieldCell = GetCell(cell);
             gameFieldCell.TextBlock.Text = value.ToString();
-            gameFieldCell.TextBlock.Foreground = _theme.ForegroundBrush;
+            gameFieldCell.TextBlock.Foreground = isAlternateColor ? new SolidColorBrush(Colors.Purple) : _theme.ForegroundBrush;
             gameFieldCell.Border.Background = _theme.BackgroundBrush;
         }
 
-        public void SetValue(int value)
+        public void SetValue(int value, bool isAlternateColor)
         {
             _selectedCell.TextBlock.Text = value.ToString();
-            _selectedCell.TextBlock.Foreground = _theme.ForegroundBrush;
+            _selectedCell.TextBlock.Foreground = isAlternateColor ? new SolidColorBrush(Colors.Purple) : _theme.ForegroundBrush;
             _selectedCell.Border.Background = _theme.BackgroundBrush;
 
             ResetSelected();
