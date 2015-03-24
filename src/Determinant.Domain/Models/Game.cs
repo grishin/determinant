@@ -11,10 +11,9 @@ namespace Determinant.Domain.Models
 {
     public class Game
     {
-        public bool IsCompleted { get; private set; }
-        
         private Matrix3x3 _matrix;
         private IEnumerable<IPlayer> _players;
+        private bool _isCompleted;
 
         public IPlayer CurrentPlayer { get; private set; }
         public IPlayer PositivePlayer { get { return _players.First(x => x.Goal == PlayerGoal.Positive); } }
@@ -29,6 +28,7 @@ namespace Determinant.Domain.Models
         {
             _players = players;
             _matrix = new Matrix3x3();
+            _isCompleted = false;
         }
 
         public void MakeTurn(MatrixCell cell, int value)
@@ -36,7 +36,7 @@ namespace Determinant.Domain.Models
             ChangePlayer();
             MakeHumanPlayerTurn(cell, value);
 
-            if (ComputerPlayer != null && !IsCompleted)
+            if (ComputerPlayer != null && !_isCompleted)
             {
                 ChangePlayer();
                 MakeComputerPlayerTurn();
@@ -84,6 +84,7 @@ namespace Determinant.Domain.Models
                     winner = null;
                 }
 
+                _isCompleted = true;
                 OnCompleted(this, new GameCompletedEventArgs { Determinant = determinant, WinnerPlayer = winner });
             }
         }
