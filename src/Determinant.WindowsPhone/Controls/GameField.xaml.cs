@@ -49,14 +49,17 @@ namespace Determinant.Controls
         {
             var gameFieldCell = GetCell(cell);
             gameFieldCell.TextBlock.Text = value.ToString();
+            gameFieldCell.TextBlock.Foreground = _theme.ForegroundBrush;
+            gameFieldCell.Border.Background = _theme.BackgroundBrush;
         }
 
         public void SetValue(int value)
         {
             _selectedCell.TextBlock.Text = value.ToString();
+            _selectedCell.TextBlock.Foreground = _theme.ForegroundBrush;
+            _selectedCell.Border.Background = _theme.BackgroundBrush;
 
             ResetSelected();
-            ResetCellVisual(_selectedCell);
         }
 
         private IEnumerable<GameFieldCell> GetAllCells()

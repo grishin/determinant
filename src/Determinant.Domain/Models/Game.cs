@@ -22,7 +22,8 @@ namespace Determinant.Domain.Models
         public IPlayer PositivePlayer { get; private set;}
         public IPlayer NegativePlayer { get; private set;}
 
-        public event EventHandler OnCreated;
+        public GameMode Mode { get; private set; }
+
         public event EventHandler OnCompleted;
         public event EventHandler OnHumanPlayerTurn;
         public event EventHandler OnComputerPlayerTurn;
@@ -34,14 +35,12 @@ namespace Determinant.Domain.Models
             NegativePlayer = negativePlayer;
 
             _matrix = new Matrix3x3();
-            _players = new [] {
-             PositivePlayer, NegativePlayer   
-            };
+            _players = new [] { PositivePlayer, NegativePlayer };
+
+            Mode = _players.Any(x => x is ComputerPlayer) ? GameMode.SinglePlayer : GameMode.MultiPlayer;
 
             IsCompleted = false;
             Winner = null;
-
-            OnCreated(this, new EventArgs());
         }
 
         public void MakeHumanPlayerTurn(MatrixCell cell, int value)
@@ -88,5 +87,11 @@ namespace Determinant.Domain.Models
                 OnCompleted(this, new EventArgs());
             }
         }
+    }
+
+    public enum GameMode
+    {
+        SinglePlayer = 1,
+        MultiPlayer = 2
     }
 }

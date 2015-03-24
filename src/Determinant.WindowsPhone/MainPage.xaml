@@ -14,9 +14,7 @@
         <controls:PlayersInfo x:Name="PlayersInfo"></controls:PlayersInfo>
         <controls:AvailableNumbers x:Name="AvailableNumbers"></controls:AvailableNumbers>
 
-        <StackPanel Name="WinnerBlock"  HorizontalAlignment="Center" Orientation="Horizontal">
-            <TextBlock Name="Winner" Margin="0 10 30 10" TextAlignment="Center" FontSize="30" Text="Winner is"></TextBlock>
-            <Button Name="Restart" Content="Restart" Tapped="Restart_Tapped"></Button>
-        </StackPanel>
+        <TextBlock Name="Winner" Margin="0 10 0 0" TextAlignment="Center" FontSize="30" Text="" ></TextBlock>
+        <Button Name="Restart" Content="Restart" HorizontalAlignment="Center" Tapped="Restart_Tapped"></Button>
     </StackPanel>
 </Page>

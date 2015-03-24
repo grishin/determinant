@@ -57,12 +57,12 @@ namespace Determinant.Controls
 
             selectedBorder.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
+            SelectedValue = Convert.ToInt32(selecteTextBlock.Text);
+
             OnCellSelected(this, new EventArgs());
 
          /*
-            _selectedGameFieldGridText.Text = selectedAvailableNumbersGridTextBlock.Text;
-            _selectedGameFieldGridText.Foreground = this.Foreground;           
-            _selectedGameFieldGridCell.Background = this.Background;
+            
 
             var computerPlayerTurnResult = _game.MakeTurn(_selectedGameFieldGridColumn.Value, _selectedGameFieldGridRow.Value, Convert.ToInt32(selectedAvailableNumbersGridTextBlock.Text));
 

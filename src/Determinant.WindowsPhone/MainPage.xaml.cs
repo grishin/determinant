@@ -33,25 +33,23 @@ namespace Determinant
             GameField.OnCellDeselected += OnGameFieldCellDeselected;
 
             AvailableNumbers.OnCellSelected += OnAvailableNumbersCellSelected;
-
-            _game.OnCreated += OnGameCreated;
-            _game.OnCompleted += OnGameCompleted;
         }
 
         private void Init()
         {
             _game = new SinglePlayerGameBuilder().CreateGame();
-        }
+            _game.OnCompleted += OnGameCompleted;
 
-        private void OnGameCreated(object sender, EventArgs e)
-        {
             // init game elements in user controls
             GameField.Init(new Theme(this.Foreground, this.Background));
             PlayersInfo.Init(_game.PositivePlayer.Name, _game.NegativePlayer.Name);
             AvailableNumbers.Init();
 
             // hiding game completed controls
-            WinnerBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            Winner.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            Restart.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            PlayersInfo.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            AvailableNumbers.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -72,24 +70,40 @@ namespace Determinant
         private void OnAvailableNumbersCellSelected(object sender, EventArgs e)
         {
             if (GameField.SelectedColumn == null || GameField.SelectedRow == null || AvailableNumbers.SelectedValue == null) return;
-                                                       
+
+            MakeHumanPlayerTurn();
+
+            if (_game.Mode == GameMode.SinglePlayer && !_game.IsCompleted)
+            {
+                MakeComputerPlayerTurn();
+            }
+        }
+
+        private void MakeComputerPlayerTurn()
+        {
+            var turnResult = _game.MakeComputerPlayerTurn();
+            GameField.SetValue(turnResult.Cell, turnResult.Value);
+            AvailableNumbers.HideValue(turnResult.Value);
+        }
+
+        private void MakeHumanPlayerTurn()
+        {
             int column = GameField.SelectedColumn.Value;
             int row = GameField.SelectedRow.Value;
             int value = AvailableNumbers.SelectedValue.Value;
 
-            _game.MakeHumanPlayerTurn(new MatrixCell { Row = row, Column = column}, value);
+            _game.MakeHumanPlayerTurn(new MatrixCell { Row = row, Column = column }, value);
             GameField.SetValue(value);
-
-            // hardcoded computer player turn
-            var turnResult = _game.MakeComputerPlayerTurn();
-            GameField.SetValue(turnResult.Cell, turnResult.Value);
-            
+            AvailableNumbers.HideValue(value);
         }
 
         private void OnGameCompleted(object sender, EventArgs e)
         {
             Winner.Text = _game.Winner != null ? "Winner is " + _game.Winner.Name : "DRAW";
-            WinnerBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            Winner.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            Restart.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            PlayersInfo.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            AvailableNumbers.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
         private void Restart_Tapped(object sender, TappedRoutedEventArgs e)
