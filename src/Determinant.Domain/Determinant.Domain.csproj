@@ -42,11 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\AI\IComputerPlayerStrategy.cs" />
-    <Compile Include="Models\AI\ComputerPlayerStrategyKiller.cs" />
+    <Compile Include="Models\AI\ComputerPlayerStrategySmart.cs" />
     <Compile Include="Models\AI\ComputerPlayerStrategyRandom.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\GameCompletedEventArgs.cs" />
-    <Compile Include="Models\Matrix\IMatrix.cs" />
     <Compile Include="Models\Matrix\Matrix.cs" />
     <Compile Include="Models\Matrix\MatrixCell.cs" />
     <Compile Include="Models\Player\ComputerPlayer.cs" />

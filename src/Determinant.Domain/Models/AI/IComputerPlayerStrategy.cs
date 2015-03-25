@@ -10,7 +10,7 @@ namespace Determinant.Domain.Models.AI
 {
     public interface IComputerPlayerStrategy
     {
-        TurnResult MakeTurn(IMatrix matrix);
+        TurnResult MakeTurn(Matrix3x3 matrix, PlayerGoal goal);
 
         string Name { get;}
     }

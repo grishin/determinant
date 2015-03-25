@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Determinant.Domain.Models.Matrix
 {
-    public class Matrix3x3 : IMatrix
+    public class Matrix3x3 
     {
         private int?[,] _matrix = new int?[Columns, Rows];
         private int[] _allValues = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -20,6 +20,27 @@ namespace Determinant.Domain.Models.Matrix
         public Matrix3x3()
         {
             InitMatrix(); 
+        }
+
+        private Matrix3x3(int?[,] matrixData)
+        {
+            _matrix = matrixData;
+        }
+
+        public Matrix3x3 Clone()
+        {
+            var copy = new int?[Columns, Rows];
+
+            for (int x = 0; x < Columns; x++)
+            {
+                for (int y = 0; y < Rows; y++)
+                {
+                    copy[x, y] = _matrix[x, y];
+                }
+            }
+
+
+            return new Matrix3x3(copy);
         }
 
         private bool ValidateCellPosition(int x, int y)
@@ -68,8 +89,7 @@ namespace Determinant.Domain.Models.Matrix
 
         public IEnumerable<int> GetAvailableValues()
         {
-            int[] allValues = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            return allValues.Except(GetUsedValues());
+            return _allValues.Except(GetUsedValues());
         }
 
         public bool IsCellEmpty(MatrixCell cell)

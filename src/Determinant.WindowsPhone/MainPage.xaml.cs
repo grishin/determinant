@@ -47,7 +47,7 @@ namespace Determinant
             _game.OnPlayerChanged += OnPlayerChanged;
 
             // init game elements in user controls
-            GameField.Init(new Theme(this.Foreground, this.Background));
+            GameField.Init();
             PlayersInfo.Init(_game.PositivePlayer.Name, _game.NegativePlayer.Name);
             AvailableNumbers.Init();
 

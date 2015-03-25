@@ -39,9 +39,9 @@ namespace Determinant
             
         }
 
-        private void HumanVsDummy_Click(object sender, RoutedEventArgs e)
+        private void HumanVsAI_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(MainPage), new SinglePlayerGameBuilder(new ComputerPlayerStrategyRandom()));
+            Frame.Navigate(typeof(MainPage), new SinglePlayerGameBuilder(new ComputerPlayerStrategySmart()));
         }
 
         private void HumanVsHuman_Click(object sender, RoutedEventArgs e)

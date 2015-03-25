@@ -22,7 +22,7 @@ namespace Determinant.Domain.Models.AI
             get { return "Dummy"; }
         }
 
-        public TurnResult MakeTurn(IMatrix matrix)
+        public TurnResult MakeTurn(Matrix3x3 matrix, PlayerGoal goal)
         {
             int[] availableValues = matrix.GetAvailableValues().ToArray();
             MatrixCell[] availableCells = matrix.GetAvailableCells().ToArray();
@@ -34,13 +34,13 @@ namespace Determinant.Domain.Models.AI
             };
         }
 
-        private int GetRandomValue(int[] values)
+        protected int GetRandomValue(int[] values)
         {
             int position = _random.Next(0, values.Length - 1);
             return values[position];
         }
 
-        private MatrixCell GetRandomCell(MatrixCell[] cells)
+        protected MatrixCell GetRandomCell(MatrixCell[] cells)
         {
             int position = _random.Next(0, cells.Length - 1);
             return cells[position];

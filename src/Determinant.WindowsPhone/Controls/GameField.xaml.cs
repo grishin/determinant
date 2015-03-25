@@ -38,10 +38,8 @@ namespace Determinant.Controls
             this.InitializeComponent();
         }
 
-        public void Init(Theme theme)
+        public void Init()
         {
-            _theme = theme;
-
             ResetAllCellsVisual();
             ResetSelected();
         }
@@ -50,8 +48,8 @@ namespace Determinant.Controls
         {
             var gameFieldCell = GetCell(cell);
             gameFieldCell.TextBlock.Text = value.ToString();
-            gameFieldCell.TextBlock.Foreground = player.Goal == Domain.Models.Player.PlayerGoal.Negative ? new SolidColorBrush(Colors.Purple) : _theme.ForegroundBrush;
-            gameFieldCell.Border.Background = _theme.BackgroundBrush;
+            gameFieldCell.TextBlock.Foreground = player.Goal == Domain.Models.Player.PlayerGoal.Negative ? new SolidColorBrush(Colors.Purple) : this.Foreground;
+            gameFieldCell.Border.Background = this.Background;
 
             ResetSelected();
         }
@@ -88,9 +86,9 @@ namespace Determinant.Controls
 
         private void ResetCellVisual(GameFieldCell cell)
         {
-            cell.Border.Background = _theme.BackgroundBrush;
+            cell.Border.Background = this.Background;
             cell.TextBlock.Text = EmptyCellText;
-            cell.TextBlock.Foreground = _theme.BackgroundBrush;
+            cell.TextBlock.Foreground = this.Background;
         }
 
         private void ResetSelected()

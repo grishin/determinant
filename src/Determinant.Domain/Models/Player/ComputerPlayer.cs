@@ -29,9 +29,9 @@ namespace Determinant.Domain.Models.Player
             get { return _goal; }
         }
 
-        public TurnResult MakeTurn(IMatrix matrix)
+        public TurnResult MakeTurn(Matrix3x3 matrix)
         {
-            return _strategy.MakeTurn(matrix);
+            return _strategy.MakeTurn(matrix, _goal);
         }         
     }
 }
