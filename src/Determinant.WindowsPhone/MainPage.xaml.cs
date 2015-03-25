@@ -38,7 +38,6 @@ namespace Determinant
 
         private void Init()
         {
-            _game = new SinglePlayerGameBuilder().CreateGame();
             _game.OnCompleted += OnGameCompleted;
             _game.OnComputerPlayerTurn += OnComputerPlayerTurn;
             _game.OnHumanPlayerTurn += OnHumanPlayerTurn;

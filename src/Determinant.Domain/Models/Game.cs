@@ -32,6 +32,7 @@ namespace Determinant.Domain.Models
             _isCompleted = false;
         }
 
+        
         public void MakeTurn(MatrixCell cell, int value)
         {
             ChangePlayer();

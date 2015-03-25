@@ -57,6 +57,7 @@
     <Compile Include="Models\TurnResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Game\IGameBuilder.cs" />
+    <Compile Include="Services\Game\MultiPlayerGameBuilder.cs" />
     <Compile Include="Services\Game\SinglePlayerGameBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
