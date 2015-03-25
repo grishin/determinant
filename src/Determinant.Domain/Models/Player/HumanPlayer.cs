@@ -9,16 +9,13 @@ namespace Determinant.Domain.Models.Player
 {
     public class HumanPlayer : IPlayer
     {
-        public HumanPlayer(PlayerGoal goal)
+        public HumanPlayer(PlayerGoal goal, string name)
         {
             Goal = goal;
+            Name = name;
         }
 
-        public string Name
-        {
-            get { return "Human"; }
-        }
-
+        public string Name { get; private set; }
         public PlayerGoal Goal { get; private set; }
        
     }

@@ -1,4 +1,5 @@
 ﻿using Determinant.Domain.Models;
+using Determinant.Domain.Models.Player;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,6 +29,20 @@ namespace Determinant.Controls
         {
             PositivePlayerName.Text = positivePlayerName;
             NegativePlayerName.Text = negativePlayerName;
+        }
+
+        public void SetActivePlayer(IPlayer player)
+        {
+            if (player.Goal == PlayerGoal.Positive)
+            {
+                PositivePlayerName.Foreground = new SolidColorBrush(Colors.Red);
+                NegativePlayerName.Foreground = this.Foreground;
+            }
+            else // (player.Goal == PlayerGoal.Negative)
+            {
+                PositivePlayerName.Foreground = this.Foreground;
+                NegativePlayerName.Foreground = new SolidColorBrush(Colors.Red);
+            }
         }
     }
 }

@@ -24,6 +24,7 @@ namespace Determinant
     public sealed partial class MainPage : Page
     {
         private Game _game;
+        private IGameBuilder _gameBuilder;
 
         public MainPage()
         {
@@ -38,9 +39,11 @@ namespace Determinant
 
         private void Init()
         {
+            _game = _gameBuilder.CreateGame();
             _game.OnCompleted += OnGameCompleted;
             _game.OnComputerPlayerTurn += OnComputerPlayerTurn;
             _game.OnHumanPlayerTurn += OnHumanPlayerTurn;
+            _game.OnPlayerChanged += OnPlayerChanged;
 
             // init game elements in user controls
             GameField.Init(new Theme(this.Foreground, this.Background));
@@ -50,12 +53,19 @@ namespace Determinant
             // hiding game completed controls
             Winner.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             Restart.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            QuitToMenu.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             PlayersInfo.Visibility = Windows.UI.Xaml.Visibility.Visible;
             AvailableNumbers.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            // if computer player goes first
+            _game.TryMakeInitialComputerTurn();
+
+            PlayersInfo.SetActivePlayer(_game.CurrentPlayer);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            _gameBuilder = (IGameBuilder)e.Parameter;
             Init();
         }
 
@@ -82,14 +92,19 @@ namespace Determinant
 
         private void OnComputerPlayerTurn(object sender, TurnEventArgs e)
         {
-            GameField.SetValue(e.Cell, e.Value, _game.CurrentPlayer.Goal == Domain.Models.Player.PlayerGoal.Negative );
+            GameField.SetValue(e.Cell, e.Value, _game.CurrentPlayer);
             AvailableNumbers.HideValue(e.Value);
         }
 
         private void OnHumanPlayerTurn(object sender, TurnEventArgs e)
         {
-            GameField.SetValue(e.Value, _game.CurrentPlayer.Goal == Domain.Models.Player.PlayerGoal.Negative);
+            GameField.SetValue(e.Cell, e.Value, _game.CurrentPlayer);
             AvailableNumbers.HideValue(e.Value);
+        }
+
+        private void OnPlayerChanged(object sender, EventArgs e)
+        {
+            PlayersInfo.SetActivePlayer(_game.CurrentPlayer);
         }
 
         private void OnGameCompleted(object sender, GameCompletedEventArgs e)
@@ -98,13 +113,20 @@ namespace Determinant
             
             Winner.Visibility = Windows.UI.Xaml.Visibility.Visible;
             Restart.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            QuitToMenu.Visibility = Windows.UI.Xaml.Visibility.Visible;
             PlayersInfo.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            AvailableNumbers.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            AvailableNumbers.Visibility = Windows.UI.Xaml.Visibility.Collapsed;            
         }
 
         private void Restart_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Init();
+        }
+
+        private void QuitToMenu_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            _game = null;
+            Frame.Navigate(typeof(StartPage));
         }
     }
 }

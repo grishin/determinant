@@ -15,7 +15,7 @@ namespace Determinant.Domain.Services.Game
         public Game CreateGame()
         {
             var playerGoals = new[] { PlayerGoal.Positive, PlayerGoal.Negative }.OrderBy(x => Guid.NewGuid()).ToArray();
-            var players = new IPlayer[] { new HumanPlayer(playerGoals[0]), new HumanPlayer(playerGoals[1]) }.OrderBy(x => Guid.NewGuid()).ToArray();
+            var players = new IPlayer[] { new HumanPlayer(playerGoals[0], "Human A"), new HumanPlayer(playerGoals[1], "Human B") }.OrderBy(x => Guid.NewGuid()).ToArray();
 
             return new Game(players);
         }

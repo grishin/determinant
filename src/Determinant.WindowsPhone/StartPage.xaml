@@ -11,8 +11,8 @@
     <Grid>
         <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center" Padding="30" FontSize="50" Foreground="{ThemeResource PhoneAccentBrush}" FontWeight="Thin" Text="Determinant"></TextBlock>
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-            <Button Name="SinglePlayer" HorizontalAlignment="Center" Content="Human vs AI" Width="200" Click="SinglePlayer_Click"></Button>
-            <Button Name="MultiPlayer" HorizontalAlignment="Center" Content="Human vs Human" Width="200" Click="MultiPlayer_Click"></Button>
+            <Button Name="HumanVsDummy" HorizontalAlignment="Center" Content="Human vs Dummy AI" Width="200" Click="HumanVsDummy_Click"></Button>
+            <Button Name="HumanVsHuman" HorizontalAlignment="Center" Content="Human vs Human" Width="200" Click="HumanVsHuman_Click"></Button>
         </StackPanel>
     </Grid>
 </Page>

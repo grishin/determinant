@@ -1,4 +1,5 @@
 ﻿using Determinant.Domain.Models.Matrix;
+using Determinant.Domain.Models.Player;
 using Determinant.Helpers;
 using Determinant.Models;
 using System;
@@ -45,19 +46,12 @@ namespace Determinant.Controls
             ResetSelected();
         }
 
-        public void SetValue(MatrixCell cell, int value, bool isAlternateColor)
+        public void SetValue(MatrixCell cell, int value, IPlayer player)
         {
             var gameFieldCell = GetCell(cell);
             gameFieldCell.TextBlock.Text = value.ToString();
-            gameFieldCell.TextBlock.Foreground = isAlternateColor ? new SolidColorBrush(Colors.Purple) : _theme.ForegroundBrush;
+            gameFieldCell.TextBlock.Foreground = player.Goal == Domain.Models.Player.PlayerGoal.Negative ? new SolidColorBrush(Colors.Purple) : _theme.ForegroundBrush;
             gameFieldCell.Border.Background = _theme.BackgroundBrush;
-        }
-
-        public void SetValue(int value, bool isAlternateColor)
-        {
-            _selectedCell.TextBlock.Text = value.ToString();
-            _selectedCell.TextBlock.Foreground = isAlternateColor ? new SolidColorBrush(Colors.Purple) : _theme.ForegroundBrush;
-            _selectedCell.Border.Background = _theme.BackgroundBrush;
 
             ResetSelected();
         }

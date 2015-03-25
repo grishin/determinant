@@ -1,4 +1,5 @@
-﻿using Determinant.Domain.Services.Game;
+﻿using Determinant.Domain.Models.AI;
+using Determinant.Domain.Services.Game;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,14 +39,14 @@ namespace Determinant
             
         }
 
-        private void SinglePlayer_Click(object sender, RoutedEventArgs e)
+        private void HumanVsDummy_Click(object sender, RoutedEventArgs e)
         {
-            new SinglePlayerGameBuilder().CreateGame();
+            Frame.Navigate(typeof(MainPage), new SinglePlayerGameBuilder(new ComputerPlayerStrategyRandom()));
         }
 
-        private void MultiPlayer_Click(object sender, RoutedEventArgs e)
+        private void HumanVsHuman_Click(object sender, RoutedEventArgs e)
         {
-            new MultiPlayerGameBuilder().CreateGame();
+            Frame.Navigate(typeof(MainPage), new MultiPlayerGameBuilder(null));
         }
     }
 }

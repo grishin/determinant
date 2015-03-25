@@ -19,47 +19,70 @@ namespace Determinant.Domain.Models
         public IPlayer PositivePlayer { get { return _players.First(x => x.Goal == PlayerGoal.Positive); } }
         public IPlayer NegativePlayer { get { return _players.First(x => x.Goal == PlayerGoal.Negative); } }
         
-        private ComputerPlayer ComputerPlayer { get { return (ComputerPlayer)_players.FirstOrDefault(x => x is ComputerPlayer); } }
 
         public event EventHandler<GameCompletedEventArgs> OnCompleted;
         public event EventHandler<TurnEventArgs> OnHumanPlayerTurn;
         public event EventHandler<TurnEventArgs> OnComputerPlayerTurn;
+        public event EventHandler OnPlayerChanged;
 
         public Game(IEnumerable<IPlayer> players)
         {
             _players = players;
             _matrix = new Matrix3x3();
             _isCompleted = false;
+            CurrentPlayer = _players.First();
+        }
+
+        public void TryMakeInitialComputerTurn()
+        {
+            if (ComputerPlayerIsAllowedToMakeTurn() && CurrentPlayer is ComputerPlayer)
+            {
+                MakeComputerPlayerTurn();
+                ChangePlayer();
+            }
+        }
+
+        private bool ComputerPlayerIsAllowedToMakeTurn()
+        {
+            return GetComputerPlayer() != null && !_isCompleted;
         }
 
         
         public void MakeTurn(MatrixCell cell, int value)
         {
-            ChangePlayer();
             MakeHumanPlayerTurn(cell, value);
 
-            if (ComputerPlayer != null && !_isCompleted)
+            if (ComputerPlayerIsAllowedToMakeTurn())
             {
                 ChangePlayer();
                 MakeComputerPlayerTurn();
             }
+
+            ChangePlayer();
         }
+
+        private ComputerPlayer GetComputerPlayer() 
+        { 
+            return (ComputerPlayer)_players.FirstOrDefault(x => x is ComputerPlayer); 
+        }
+
 
         private void ChangePlayer()
         {
             CurrentPlayer = _players.First(x => x != CurrentPlayer);
+            OnPlayerChanged(this, new EventArgs());
         }
 
         private void MakeHumanPlayerTurn(MatrixCell cell, int value)
         {
             _matrix.SetValue(cell, value);             
-            CheckIfCompleted();
+            CheckIfCompleted();             
             OnHumanPlayerTurn(this, new TurnEventArgs { Cell = cell, Value = value });
         }
 
         private TurnResult MakeComputerPlayerTurn()
         {
-            var turnResult = ComputerPlayer.MakeTurn(_matrix);
+            var turnResult = GetComputerPlayer().MakeTurn(_matrix);
             _matrix.SetValue(turnResult.Cell, turnResult.Value); 
             CheckIfCompleted();
             OnComputerPlayerTurn(this, new TurnEventArgs { Cell = turnResult.Cell, Value = turnResult.Value });
