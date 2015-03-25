@@ -1,7 +1,0 @@
-[CEAppManager]
-Version = 1.0
-Component =Matrix Game
-
-[Matrix Game]
-Description = Matrix Game is an absolutely new type of logical games. We wish you would like it.
-CabFiles =MatrixFull.cab

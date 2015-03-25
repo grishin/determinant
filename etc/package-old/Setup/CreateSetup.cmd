@@ -1,1 +1,0 @@
-ezsetup -l english -i MatrixGameFullSetup.inf -r readme.txt -e eula.txt -o MatrixGamePPC_ARM.exe 
