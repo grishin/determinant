@@ -46,7 +46,7 @@ namespace Determinant
 
         private void HumanVsHuman_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(MainPage), new MultiPlayerGameBuilder(null));
+            Frame.Navigate(typeof(MainPage), new MultiPlayerGameBuilder());
         }
     }
 }
